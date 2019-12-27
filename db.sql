@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Category` (
   `category_id` INT NOT NULL,
   `category_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`category_id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = DEFAULT;
+ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
@@ -87,18 +87,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Resource` (
     REFERENCES `mydb`.`Project` (`project_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Role`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Role` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`Role` (
-  `role_id` INT NOT NULL,
-  `role_name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`role_id`))
 ENGINE = InnoDB;
 
 
