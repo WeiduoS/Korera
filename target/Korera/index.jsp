@@ -12,5 +12,12 @@
 </head>
 <body>
     <h1>hello</h1>
+    <a href="user/hello"> hello</a>
+<br>
+    <a href="user/testReqestMapping?username=zhangsan"> request mapping</a>
+    <br>
+    <a href="project/findAll"> request mapping</a>
+    <br>
+
 </body>
 </html>
