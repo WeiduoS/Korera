@@ -16,7 +16,7 @@
 <br>
     <a href="user/testReqestMapping?username=zhangsan"> request mapping</a>
     <br>
-    <a href="project/findAll"> request mapping</a>
+    <a href="project/findAll"> find all project</a>
     <br>
 
 </body>
