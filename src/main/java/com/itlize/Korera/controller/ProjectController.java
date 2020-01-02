@@ -29,7 +29,7 @@ public class ProjectController {
         return "success";
     }
 
-    @RequestMapping(value = "/find", method = )
+    @RequestMapping(value = "/find")
     public String find() {
         if(projectServices == null) return "";
         System.out.println("represent layer: list all project");
