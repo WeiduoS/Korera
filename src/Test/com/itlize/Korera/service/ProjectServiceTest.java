@@ -1,4 +1,4 @@
-package com.itlize.Korea.service;
+package com.itlize.Korera.service;
 
 import com.itlize.Korera.entities.Project;
 import com.itlize.Korera.service.ProjectServices;
