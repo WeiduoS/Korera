@@ -22,6 +22,7 @@
     <hibernate.version>5.4.9.Final</hibernate.version>
     <logback.version>1.1.7</logback.version>
     <slf4j.version>1.7.21</slf4j.version>
+    <JUnit.version>4.12</JUnit.version>
   </properties>
 
   <dependencies>
@@ -73,6 +74,15 @@
       <artifactId>spring-data-jpa</artifactId>
       <version>${spring.jpa.version}</version>
     </dependency>
+
+    <!--Spring TestContext Framework-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+    </dependency>
+
 
 
     <!--Hibernate-->
@@ -160,8 +170,8 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <!--<scope>test</scope>-->
+      <version>${JUnit.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <!--log generator-->
