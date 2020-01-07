@@ -120,19 +120,21 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public int removeProject(Project project) {
+    public int removeProject(Integer project_id) {
         if(sessionFactory == null) return -1;
         Session session = sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
-            session.delete(project);
+            String sql = "delete from Project where project_id=?";
+            Query query = session.createSQLQuery(sql).setParameter(1, project_id);
+            int res = query.executeUpdate();
             session.getTransaction().commit();
+            return res;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return -1;
         }
-        return 1;
     }
 
     @Override

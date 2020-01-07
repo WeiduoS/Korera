@@ -22,7 +22,7 @@ public interface ProjectDao {
 
     public List<Project> getProjectByName(String project_name);
 
-    public int removeProject(Project project);
+    public int removeProject(Integer project_id);
 
     public List<Project> paginationProject(Integer startIndex, Integer pageSize);
 

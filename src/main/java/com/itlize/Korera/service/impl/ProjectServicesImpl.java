@@ -63,9 +63,9 @@ public class ProjectServicesImpl implements ProjectServices {
     }
 
     @Override
-    public int removeProject(Project project) {
-        if(project == null) return -1;
-        int res = pd.removeProject(project);
+    public int removeProject(Integer project_id) {
+        if(project_id == null) return -1;
+        int res = pd.removeProject(project_id);
         return res;
     }
 

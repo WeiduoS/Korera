@@ -70,7 +70,7 @@ public class ProjectDaoTest {
         project.setProject_id(101);
         project.setProject_name("hello");
         project.setUser_id(5);
-        int res = pd.removeProject(project);
+        int res = pd.removeProject(project.getProject_id());
         System.out.println("res: " + res);
     }
 
