@@ -13,7 +13,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</property>
 
-        <mapping class="com.itlize.Korera.entities.Project"></mapping>
+<!--        <mapping class="com.itlize.Korera.entities.Project"></mapping>-->
         <mapping package="com.itlize.Korera.dao"></mapping>
     </session-factory>
 </hibernate-configuration>

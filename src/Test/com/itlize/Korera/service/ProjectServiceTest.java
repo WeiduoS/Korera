@@ -29,9 +29,9 @@ public class ProjectServiceTest {
     @Test
     public void addProjectTest() {
         Project project = new Project();
-        project.setProject_id(101);
+        project.setProject_id(10001);
         project.setProject_name("hello" + 101);
-        project.setUser_id(5);
+        //project.setUser_id(5);
         int res = ps.addProject(project);
         System.out.println(res);
     }
@@ -41,7 +41,7 @@ public class ProjectServiceTest {
         Project project = new Project();
         project.setProject_id(101);
         project.setProject_name("hello2222" + 101);
-        project.setUser_id(5);
+        //project.setUser_id(5);
         int res = ps.updateProject(project);
         System.out.println("res: " + res);
     }
@@ -50,7 +50,7 @@ public class ProjectServiceTest {
     public void saveOrUpdateProjectTest() {
         Project project = new Project();
         project.setProject_name("hello");
-        project.setUser_id(5);
+       // project.setUser_id(5);
         int res = ps.saveOrUpdateProject(project);
         System.out.println("res: " + res);
     }

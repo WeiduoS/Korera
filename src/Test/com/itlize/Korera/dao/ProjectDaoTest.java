@@ -32,7 +32,7 @@ public class ProjectDaoTest {
         Project project = new Project();
         project.setProject_id(1);
         project.setProject_name("hello");
-        project.setUser_id(5);
+        //project.setUser_id(5);
         int res = pd.updateProject(project);
         System.out.println("res: " + res);
     }
@@ -41,7 +41,7 @@ public class ProjectDaoTest {
     public void saveOrUpdateProjectTest() {
         Project project = new Project();
         project.setProject_name("hello");
-        project.setUser_id(5);
+        //project.setUser_id(5);
         int res = pd.saveOrUpdateProject(project);
         System.out.println("res: " + res);
     }
