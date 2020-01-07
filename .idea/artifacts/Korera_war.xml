@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Korera:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>Korera</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="Korera.war">
+      <element id="artifact" artifact-name="Korera:war exploded" />
+    </root>
+  </artifact>
+</component>
