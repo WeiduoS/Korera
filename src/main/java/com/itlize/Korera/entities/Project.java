@@ -2,13 +2,15 @@ package com.itlize.Korera.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Weiduo
  * @date 2019/12/30 - 3:54 PM
  */
 @Entity
-@Table(schema = "mydb", name="Project")
+@Table(schema = "mydb_new", name="Project")
 public class Project implements Serializable {
     @Id
     @Column(name="project_id")
@@ -18,11 +20,18 @@ public class Project implements Serializable {
     @Column(name="project_name")
     private String project_name;
 
-    @Column(name="user_id")
-    private Integer user_id;
+//    @Column(name="user_id")
+//    private Integer user_id;
+
+    @OneToMany(mappedBy = "project")
+    private List<Resource> resource = new ArrayList<>();
 
     public Project() {
 
+    }
+
+    public Project(String project_name){
+        this.project_name = project_name;
     }
 
     public Integer getProject_id() {
@@ -41,20 +50,28 @@ public class Project implements Serializable {
         this.project_name = project_name;
     }
 
-    public Integer getUser_id() {
-        return user_id;
-    }
+//    public Integer getUser_id() {
+//        return user_id;
+//    }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
-    }
+//    public void setUser_id(Integer user_id) {
+//        this.user_id = user_id;
+//    }
 
     @Override
     public String toString() {
         return "Project{" +
                 "project_id=" + project_id +
                 ", project_name='" + project_name + '\'' +
-                ", user_id=" + user_id +
+//                ", user_id=" + user_id +
                 '}';
+    }
+
+    public List<Resource> getResource() {
+        return resource;
+    }
+
+    public void setResource(List<Resource> resource) {
+        this.resource = resource;
     }
 }

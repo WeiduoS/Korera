@@ -18,10 +18,10 @@ public class ProjectDaoTest {
     @Test
     public void addProjectTest() {
         Project project = new Project();
-        for(int i = 4 ; i <= 100; i++) {
+        for(int i = 1 ; i <= 100; i++) {
             project.setProject_id(i);
             project.setProject_name("hello" + i);
-            project.setUser_id(5);
+            //project.setUser_id(5);
             int res = pd.addProject(project);
             System.out.println("res: " + res);
         }
@@ -32,7 +32,7 @@ public class ProjectDaoTest {
         Project project = new Project();
         project.setProject_id(1);
         project.setProject_name("hello");
-        project.setUser_id(5);
+        //project.setUser_id(5);
         int res = pd.updateProject(project);
         System.out.println("res: " + res);
     }
@@ -41,7 +41,7 @@ public class ProjectDaoTest {
     public void saveOrUpdateProjectTest() {
         Project project = new Project();
         project.setProject_name("hello");
-        project.setUser_id(5);
+        //project.setUser_id(5);
         int res = pd.saveOrUpdateProject(project);
         System.out.println("res: " + res);
     }
@@ -69,7 +69,7 @@ public class ProjectDaoTest {
         Project project = new Project();
         project.setProject_id(2);
         project.setProject_name("hello");
-        project.setUser_id(5);
+        //project.setUser_id(5);
         int res = pd.removeProject(project);
         System.out.println("res: " + res);
     }
