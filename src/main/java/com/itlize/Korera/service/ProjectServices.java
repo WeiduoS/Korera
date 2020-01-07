@@ -9,7 +9,19 @@ import java.util.List;
  * @date 2019/12/30 - 3:59 PM
  */
 public interface ProjectServices {
-    public List<Project> findAll();
+    public int addProject(Project project);
 
-    public int savePoject(Project project);
+    public int updateProject(Project project);
+
+    public int saveOrUpdateProject(Project project);
+
+    public List<Project> listProjects();
+
+    public Project getProjectById(Integer id);
+
+    public List<Project> getProjectByName(String project_name);
+
+    public int removeProject(Integer project_id);
+
+    public List<Project> paginationProject(Integer startIndex, Integer pageSize);
 }

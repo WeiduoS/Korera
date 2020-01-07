@@ -23,15 +23,16 @@
         http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
        default-lazy-init="true">
 
+    <!--<context:annotation-config/>-->
     <!--setting the connection pool-->
     <!--dao layer database properties-->
     <!--configuration file -->
-    <context:property-placeholder location="classpath:database.properties"/>
+    <context:property-placeholder location="classpath:/config/hibernate.properties"/>
 
     <!--setting the business layer scan-->
-    <context:component-scan base-package="com.itlize.Korera">
+    <context:component-scan base-package="com.itlize.Korera" use-default-filters="true">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <!--<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>-->
     </context:component-scan>
 
     <!-- Database connection pool -->
@@ -65,18 +66,20 @@
     <!-- Spring manages Hibernate step 2: configure the sessionFactory -->
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource1"></property>
+        <property name="dataSource" ref="dataSource2"></property>
         <property name="packagesToScan">
             <list>
                 <value>com.itlize.Korera.entities</value>
-                <value>com.itlize.Korera.dao</value>
+                <!--<value>com.itlize.Korera.dao</value>-->
             </list>
         </property>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
                 <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
             </props>
         </property>
     </bean>
@@ -84,10 +87,11 @@
     <!-- Database transaction step 1: configure the database manager -->
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"></property>
+        <!--<property name="sessionFactory" ref="sessionFactory"></property>-->
+        <property name="sessionFactory" value="#{sessionFactory}"></property>
     </bean>
 
     <!-- Open transaction annotation -->
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>
