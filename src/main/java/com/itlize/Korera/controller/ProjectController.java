@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +38,10 @@ public class ProjectController {
         List<Project> projects = projectServices.listProjects();
         model.addAttribute("projects", projects);
         return "projects/projects";
-}
+    }
 
     @RequestMapping(value = "/findById/{project_id}", method = RequestMethod.GET)
-    public String findByID(@PathVariable("project_id")Integer project_id, Model model) {
+    public String findByID(@PathVariable("project_id")Integer project_id, Model model, HttpServletRequest request) {
          if(projectServices == null || project_id == null) return "";
         System.out.println("project find by id: " + project_id);
         Project project = projectServices.getProjectById(project_id);

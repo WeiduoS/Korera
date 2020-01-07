@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: com.itlize.Korera.dao.UserDaoTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 12.626 s <<< FAILURE! - in com.itlize.Korera.dao.UserDaoTest
+getUsersByIdTest(com.itlize.Korera.dao.UserDaoTest)  Time elapsed: 0.008 s  <<< ERROR!
+java.lang.NullPointerException
+	at com.itlize.Korera.dao.UserDaoTest.getUsersByIdTest(UserDaoTest.java:73)
+
+listUsersTest(com.itlize.Korera.dao.UserDaoTest)  Time elapsed: 0.143 s  <<< ERROR!
+javax.persistence.PersistenceException: org.hibernate.PropertyAccessException: Null value was assigned to a property [class com.itlize.Korera.entities.User.project_id] of primitive type setter of com.itlize.Korera.entities.User.project_id
+	at com.itlize.Korera.dao.UserDaoTest.listUsersTest(UserDaoTest.java:66)
+Caused by: org.hibernate.PropertyAccessException: Null value was assigned to a property [class com.itlize.Korera.entities.User.project_id] of primitive type setter of com.itlize.Korera.entities.User.project_id
+	at com.itlize.Korera.dao.UserDaoTest.listUsersTest(UserDaoTest.java:66)
+Caused by: java.lang.IllegalArgumentException: Can not set int field com.itlize.Korera.entities.User.project_id to null value
+	at com.itlize.Korera.dao.UserDaoTest.listUsersTest(UserDaoTest.java:66)
+
