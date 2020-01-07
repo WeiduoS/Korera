@@ -32,18 +32,22 @@
                 <td>${project.user_id}</td>
                 <td><a href="${cpt}/project/findById/${project.project_id}">edit</a></td>
                 <td>
-                    <form action="${cpt}/project/delete/${project.project_id}" method="post">
-                        <input type="hidden" name="_method" value="delete"/>
-                        <input type="submit" value="delete"/>
-                    </form>
+                    <a class="delBut" href="${cpt}/project/delete/${project.project_id}">delete</a>
                 </td>
             </tr>
         </c:forEach>
     </table>
 <a href="/project/add">add project</a>
+<form id="delProject" action="${cpt}/project/delete/${project.project_id}" method="post">
+    <input type="hidden" name="_method" value="delete"/>
+</form>
 <script>
     $(function () {
-        alert("test");
+        $(".delBut").click(function () {
+            $("#delProject").attr("action", this.href);
+            $("#delProject").submit()
+            return false;
+        })
     });
 </script>
 <%--pageContext: ${pageScope.projects}--%>

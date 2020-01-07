@@ -37,7 +37,7 @@ public class ProjectController {
         List<Project> projects = projectServices.listProjects();
         model.addAttribute("projects", projects);
         return "projects/projects";
-}
+    }
 
     @RequestMapping(value = "/findById/{project_id}", method = RequestMethod.GET)
     public String findByID(@PathVariable("project_id")Integer project_id, Model model) {
