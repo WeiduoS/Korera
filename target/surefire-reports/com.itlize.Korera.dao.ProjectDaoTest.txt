@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.itlize.Korera.dao.ProjectDaoTest
--------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.816 s - in com.itlize.Korera.dao.ProjectDaoTest

@@ -1,7 +1,0 @@
--------------------------------------------------------------------------------
-Test set: SpringTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.284 s <<< FAILURE! - in SpringTest
-initializationError(SpringTest)  Time elapsed: 0.006 s  <<< ERROR!
-java.lang.Exception: No runnable methods
-
