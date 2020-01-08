@@ -16,6 +16,10 @@ public interface UserServices {
 
     public User getUserById(Integer id);
 
-    public int removeUser(User user);
+    public List<User> getUserByName(String user_name);
+
+    public int removeUser(Integer user);
+
+    public List<User> paginationUser(Integer startIndex, Integer pageSize);
 
 }

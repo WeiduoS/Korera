@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Project` (
   `project_name` VARCHAR(45) NOT NULL,
   `user_id` INT NOT NULL,
   PRIMARY KEY (`project_id`),
-  INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
+  INDEX `user_id_idx` (`user_id` ASC),
   CONSTRAINT `user_id`
     FOREIGN KEY (`user_id`)
     REFERENCES `mydb`.`User` (`user_id`)
@@ -75,8 +75,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Resource` (
   `category_id` INT NOT NULL,
   `project_id` INT NULL,
   PRIMARY KEY (`resource_id`),
-  INDEX `category_id_idx` (`category_id` ASC) VISIBLE,
-  INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
+  INDEX `category_id_idx` (`category_id` ASC),
+  INDEX `project_id_idx` (`project_id` ASC),
   CONSTRAINT `category_id`
     FOREIGN KEY (`category_id`)
     REFERENCES `mydb`.`Category` (`category_id`)

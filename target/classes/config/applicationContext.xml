@@ -27,7 +27,6 @@
     <!--setting the connection pool-->
     <!--dao layer database properties-->
     <!--configuration file -->
-
     <context:property-placeholder location="classpath:/config/hibernate.properties"/>
 
     <!--setting the business layer scan-->
@@ -94,5 +93,8 @@
 
     <!-- Open transaction annotation -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--enable Spring Security-->
+    <import resource="spring-security"/>
 
 </beans>

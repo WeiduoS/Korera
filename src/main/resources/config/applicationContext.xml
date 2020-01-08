@@ -94,4 +94,7 @@
     <!-- Open transaction annotation -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <!--enable Spring Security-->
+    <import resource="spring-security"/>
+
 </beans>

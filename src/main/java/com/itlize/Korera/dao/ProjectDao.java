@@ -2,6 +2,7 @@ package com.itlize.Korera.dao;
 
 import com.itlize.Korera.entities.Project;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -23,6 +24,8 @@ public interface ProjectDao {
     public List<Project> getProjectByName(String project_name);
 
     public int removeProject(Integer project_id);
+
+    public BigInteger getProjectSize();
 
     public List<Project> paginationProject(Integer startIndex, Integer pageSize);
 

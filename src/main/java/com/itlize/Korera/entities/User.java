@@ -1,27 +1,30 @@
 package com.itlize.Korera.entities;
 
-import com.mysql.cj.jdbc.Blob;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.sql.Blob;
 import java.sql.Date;
 
 @Entity
+@Table(schema = "mydb", name="User")
 public class User {
+
     @Id
-    @Column
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_Id;
-    @Column
+
+    @Column(name = "user_name")
     private String user_name;
-    @Column
+
+    @Column(name = "password")
     private String password;
-    @Column
-    private String icon;
-    @Column
+
+    @Column(name = "icon")
+    private Blob icon;
+
+    @Column(name = "join_date")
     private Date join_date;
-    @Column
-    private int project_id;
+
 
     public int getUser_Id() {
         return user_Id;
@@ -47,11 +50,11 @@ public class User {
         this.password = password;
     }
 
-    public String getIcon() {
+    public Blob getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon) {
+    public void setIcon(Blob icon) {
         this.icon = icon;
     }
 
@@ -63,11 +66,14 @@ public class User {
         this.join_date = join_date;
     }
 
-    public int getProject_id() {
-        return project_id;
-    }
-
-    public void setProject_id(int project_id) {
-        this.project_id = project_id;
+    @Override
+    public String toString() {
+        return "User{" +
+                "user_Id=" + user_Id +
+                ", user_name='" + user_name + '\'' +
+                ", password='" + password + '\'' +
+                ", icon=" + icon +
+                ", join_date=" + join_date +
+                '}';
     }
 }

@@ -9,6 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,19 +25,18 @@ public class ProjectDaoImpl implements ProjectDao {
 
     @Override
     public int addProject(Project project) {
-        System.out.println(sessionFactory);
         if(sessionFactory == null) return -1;
         Session session = sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
             session.save(project);
             session.getTransaction().commit();
+            return 1;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return -1;
         }
-        return 1;
     }
 
     @Override
@@ -47,12 +47,12 @@ public class ProjectDaoImpl implements ProjectDao {
             session.beginTransaction();
             session.update(project);
             session.getTransaction().commit();
+            return 1;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return -1;
         }
-        return 1;
     }
 
     @Override
@@ -63,12 +63,12 @@ public class ProjectDaoImpl implements ProjectDao {
             session.beginTransaction();
             session.saveOrUpdate(project);
             session.getTransaction().commit();
+            return 1;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return -1;
         }
-        return 1;
     }
 
     @Override
@@ -92,12 +92,12 @@ public class ProjectDaoImpl implements ProjectDao {
             session.beginTransaction();
             project = session.get(Project.class, id);
             session.getTransaction().commit();
+            return project;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return null;
         }
-        return project;
     }
 
     @Override
@@ -111,12 +111,12 @@ public class ProjectDaoImpl implements ProjectDao {
             Query query = session.createSQLQuery(sql).setParameter(1, project_name);
             list = ((NativeQuery) query).addEntity(Project.class).list();
             session.getTransaction().commit();
+            return list;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return new ArrayList<>();
         }
-        return list;
     }
 
     @Override
@@ -138,6 +138,24 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    public BigInteger getProjectSize() {
+        if(sessionFactory == null) return BigInteger.valueOf(-1);
+        Session session = sessionFactory.getCurrentSession();
+        try{
+            session.beginTransaction();
+            String sql = "select count(project_id) from Project";
+            Query query = session.createSQLQuery(sql);
+            List<BigInteger> list = query.list();
+            session.getTransaction().commit();
+            return list.get(0);
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return BigInteger.valueOf(-1);
+        }
+    }
+
+    @Override
     public List<Project> paginationProject(Integer startIndex, Integer pageSize) {
         if(sessionFactory == null) return new ArrayList<>();
         Session session = sessionFactory.getCurrentSession();
@@ -148,7 +166,6 @@ public class ProjectDaoImpl implements ProjectDao {
             String sql = "select * from Project";
             Query query = session.createSQLQuery(sql).setFirstResult(limit).setMaxResults(pageSize);
             list = ((NativeQuery) query).addEntity(Project.class).list();
-            System.out.println("list: " + list);
             session.getTransaction().commit();
         }catch (Exception e) {
             e.getStackTrace();

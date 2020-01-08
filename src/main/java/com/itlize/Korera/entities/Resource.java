@@ -6,19 +6,22 @@ import java.io.Serializable;
 @Table(schema = "mydb_new", name="Resource")
 public class Resource implements Serializable{
     @Id
-    @Column(name="resource_id")
+    @Column(name = "resource_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer resourceId;
 
-    @Column(name="resource_code")
+    @Column(name = "resource_code")
     private String resourceCode;
 
-    @Column(name="resource_name")
+    @Column(name = "resource_name")
     private String resourceName;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @Column(name = "category_id")
+    private Integer category_id;
+
+//    @ManyToOne
+//    @JoinColumn(name = "project_id")
+//    private Project project;
 
 //        @ManyToOne
 //    @JoinColumn(name = "categoryId")
@@ -28,15 +31,8 @@ public class Resource implements Serializable{
 //    private Integer categoryId;
 
     public Resource() {
-    }
 
-    public Resource(String resourceCode, String resourceName, Project project, Integer categoryId){
-        this.resourceName = resourceName;
-        this.resourceCode = resourceCode;
-        this.project = project;
-//        this.categoryId = categoryId;
     }
-
 
     public Integer getResourceId() {
         return resourceId;
@@ -62,11 +58,21 @@ public class Resource implements Serializable{
         this.resourceName = resourceName;
     }
 
-    public Project getProject() {
-        return project;
+    public Integer getCategory_id() {
+        return category_id;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setCategory_id(Integer category_id) {
+        this.category_id = category_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Resource{" +
+                "resourceId=" + resourceId +
+                ", resourceCode='" + resourceCode + '\'' +
+                ", resourceName='" + resourceName + '\'' +
+                ", category_id=" + category_id +
+                '}';
     }
 }

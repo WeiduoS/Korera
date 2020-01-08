@@ -1,6 +1,5 @@
 package com.itlize.Korera.dao;
 
-import com.itlize.Korera.entities.Project;
 import com.itlize.Korera.entities.User;
 
 import java.util.List;
@@ -17,5 +16,9 @@ public interface UserDao {
 
     public User getUserById(Integer id);
 
-    public int removeUser(User user);
+    public List<User> getUserByName(String name);
+
+    public int removeUser(Integer user_id);
+
+    public List<User> paginationUser(Integer startIndex, Integer pageSize);
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Repository("ResourceDaoImpl")
 public class ResourceDaoImpl implements ResourceDao{
+
     @Autowired
     private SessionFactory sessionFactory;
 
