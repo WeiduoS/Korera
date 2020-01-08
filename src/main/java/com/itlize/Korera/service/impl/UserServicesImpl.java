@@ -7,10 +7,12 @@ import com.itlize.Korera.entities.User;
 import com.itlize.Korera.service.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service("UserServicesImpl")
 public class UserServicesImpl implements UserServices {
 
     @Autowired
@@ -52,9 +54,9 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public int removeUser(User user) {
-        if(user == null) return -1;
-        int res = ud.removeUser(user);
+    public int removeUser(Integer id) {
+        if(id == null) return -1;
+        int res = ud.removeUser(id);
         return res;
     }
 }

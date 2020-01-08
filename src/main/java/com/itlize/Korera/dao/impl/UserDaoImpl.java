@@ -98,18 +98,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int removeUser(User user) {
+    public int removeUser(Integer id) {
         if(sessionFactory == null) return -1;
         Session session = sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
-            session.delete(user);
+            String sql = "delete from User where user_id=?";
+            Query query = session.createSQLQuery(sql).setParameter(1, id);
+            int res = query.executeUpdate();
             session.getTransaction().commit();
+            return res;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return -1;
         }
-        return 1;
     }
 }

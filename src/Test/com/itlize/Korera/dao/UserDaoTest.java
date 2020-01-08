@@ -75,11 +75,10 @@ public class UserDaoTest {
 
     @Test
     public void removeUsersTest() {
-        User user = new User();
 
-        user.setUser_Id(1);
+        Integer id = 1;
 
-        int res = ud.removeUser(user);
+        int res = ud.removeUser(id);
         System.out.println("res: " + res);
     }
 

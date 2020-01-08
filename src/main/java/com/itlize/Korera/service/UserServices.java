@@ -16,6 +16,6 @@ public interface UserServices {
 
     public User getUserById(Integer id);
 
-    public int removeUser(User user);
+    public int removeUser(Integer id);
 
 }
