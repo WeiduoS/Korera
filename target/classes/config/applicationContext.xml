@@ -27,7 +27,6 @@
     <!--setting the connection pool-->
     <!--dao layer database properties-->
     <!--configuration file -->
-
     <context:property-placeholder location="classpath:/config/hibernate.properties"/>
 
     <!--setting the business layer scan-->

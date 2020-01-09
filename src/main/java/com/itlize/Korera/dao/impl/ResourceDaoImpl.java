@@ -38,7 +38,11 @@ public class ResourceDaoImpl implements ResourceDao{
         Session session = sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
-            session.update(resource);
+            int id = resource.getResourceId();
+            Resource rn = (Resource)session.get(Resource.class,id);
+            rn.setResourceCode(resource.getResourceCode());
+            rn.setResourceName(resource.getResourceName());
+            session.update(rn);
             session.getTransaction().commit();
         }catch (Exception e) {
             e.getStackTrace();

@@ -10,7 +10,7 @@ import java.util.List;
  * @date 2019/12/30 - 3:54 PM
  */
 @Entity
-@Table(schema = "mydb_new", name="Project")
+@Table(schema = "mydb", name="Project")
 public class Project implements Serializable {
     @Id
     @Column(name="project_id")
@@ -23,8 +23,8 @@ public class Project implements Serializable {
 //    @Column(name="user_id")
 //    private Integer user_id;
 
-    @OneToMany(mappedBy = "project")
-    private List<Resource> resource = new ArrayList<>();
+//    @OneToMany(mappedBy = "project")
+//    private List<Resource> resource = new ArrayList<>();
 
     public Project() {
 
@@ -67,11 +67,11 @@ public class Project implements Serializable {
                 '}';
     }
 
-    public List<Resource> getResource() {
-        return resource;
-    }
-
-    public void setResource(List<Resource> resource) {
-        this.resource = resource;
-    }
+//    public List<Resource> getResource() {
+//        return resource;
+//    }
+//
+//    public void setResource(List<Resource> resource) {
+//        this.resource = resource;
+//    }
 }

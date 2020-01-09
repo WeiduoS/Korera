@@ -1,13 +1,16 @@
 package com.itlize.Korera.entities;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(schema = "mydb_new", name="Resource")
+@DynamicUpdate(value =true)
+@Table(schema = "mydb", name="Resource")
 public class Resource implements Serializable{
     @Id
     @Column(name="resource_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer resourceId;
 
     @Column(name="resource_code")
@@ -16,9 +19,9 @@ public class Resource implements Serializable{
     @Column(name="resource_name")
     private String resourceName;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+//    @ManyToOne
+//    @JoinColumn(name = "project_id")
+//    private Project project;
 
 //        @ManyToOne
 //    @JoinColumn(name = "categoryId")
@@ -30,10 +33,14 @@ public class Resource implements Serializable{
     public Resource() {
     }
 
-    public Resource(String resourceCode, String resourceName, Project project, Integer categoryId){
+    public Resource(String resourceCode){
+
+    }
+
+    public Resource(String resourceCode, String resourceName){
         this.resourceName = resourceName;
         this.resourceCode = resourceCode;
-        this.project = project;
+//        this.project = project;
 //        this.categoryId = categoryId;
     }
 
@@ -62,11 +69,19 @@ public class Resource implements Serializable{
         this.resourceName = resourceName;
     }
 
-    public Project getProject() {
-        return project;
+    @Override
+    public String toString() {
+        return "Resource{" +
+                "resource_id=" + "" +
+                ", resource_name='" + resourceName+ '\'' +
+                ", resource_code=" + resourceCode +
+                '}';
     }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
+//    public Project getProject() {
+//        return project;
+//    }
+//
+//    public void setProject(Project project) {
+//        this.project = project;
+//    }
 }

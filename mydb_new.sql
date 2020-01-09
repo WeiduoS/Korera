@@ -51,14 +51,14 @@ CREATE TABLE IF NOT EXISTS `mydb_new`.`Resource` (
   `resource_id` INT NOT NULL AUTO_INCREMENT,
   `resource_code` VARCHAR(45) NOT NULL,
   `resource_name` VARCHAR(45) NOT NULL,
-  `project_id` INT NULL,
-  PRIMARY KEY (`resource_id`),
-  INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
-  CONSTRAINT `r-project_id`
-    FOREIGN KEY (`project_id`)
-    REFERENCES `mydb_new`.`Project` (`project_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+#   `project_id` INT NULL,
+  PRIMARY KEY (`resource_id`))
+#   INDEX `project_id_idx` (`project_id` ASC) VISIBLE,
+#   CONSTRAINT `r-project_id`
+#     FOREIGN KEY (`project_id`)
+#     REFERENCES `mydb_new`.`Project` (`project_id`)
+#     ON DELETE NO ACTION
+#     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 

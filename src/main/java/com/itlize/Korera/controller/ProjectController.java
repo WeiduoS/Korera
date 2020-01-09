@@ -29,10 +29,10 @@ public class ProjectController {
         return "success";
     }
 
-    @RequestMapping(value = "/find", method = )
-    public String find() {
-        if(projectServices == null) return "";
-        System.out.println("represent layer: list all project");
-        return "success";
-    }
+//    @RequestMapping(value = "/find", method = )
+//    public String find() {
+//        if(projectServices == null) return "";
+//        System.out.println("represent layer: list all project");
+//        return "success";
+//    }
 }

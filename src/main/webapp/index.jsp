@@ -11,12 +11,12 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>hello</h1>
-    <a href="user/hello"> hello</a>
+    <h1>Resource</h1>
+    <a href="resource/viewlist"> list all resources</a>
 <br>
-    <a href="user/testReqestMapping?username=zhangsan"> request mapping</a>
+    <a href="resource/findbyID/40"> find resource with id = 40 </a>
     <br>
-    <a href="project/findAll"> find all project</a>
+    <a href="resource/add"> add a resource</a>
     <br>
 
 </body>
