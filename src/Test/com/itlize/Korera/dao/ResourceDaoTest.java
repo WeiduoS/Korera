@@ -1,10 +1,14 @@
 package com.itlize.Korera.dao;
+import com.itlize.Korera.entities.Category;
+import com.itlize.Korera.entities.Project;
 import com.itlize.Korera.entities.Resource;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ResourceDaoTest {
     ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:/config/applicationContext.xml");
@@ -18,7 +22,12 @@ public class ResourceDaoTest {
         for(int i = 0; i < 5; i++) {
             resource.setResourceName("resource " + i);
             resource.setResourceCode(String.valueOf(i * 10));
-            resource.setCategory_id(1);
+            resource.setCategory_id(new Category(1));
+
+            Set<Project> set = new HashSet<>();
+            set.add(new Project());
+            resource.setProjects(set);
+
             int res = rd.addResource(resource);
             System.out.println(res);
         }
@@ -29,7 +38,7 @@ public class ResourceDaoTest {
         Resource resource = new Resource();
         resource.setResourceId(1);
         resource.setResourceName("hello");
-        resource.setCategory_id(2);
+        resource.setCategory_id(new Category(1));
         int res = rd.updateResource(resource);
         System.out.println(res);
     }
@@ -39,7 +48,7 @@ public class ResourceDaoTest {
         Resource resource = new Resource();
         resource.setResourceId(1);
         resource.setResourceName("hello11");
-        resource.setCategory_id(2);
+        resource.setCategory_id(new Category(1));
         int res = rd.updateResource(resource);
         System.out.println(res);
     }

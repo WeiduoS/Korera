@@ -3,6 +3,7 @@ package com.itlize.Korera.dao.impl;
 import com.itlize.Korera.dao.CategoryDao;
 import com.itlize.Korera.entities.Category;
 import com.itlize.Korera.entities.Project;
+import com.itlize.Korera.entities.Resource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Weiduo
@@ -76,11 +79,29 @@ public class CategoryDaoImpl implements CategoryDao {
     public List<Category> listCategories() {
         if(sessionFactory == null) return new ArrayList<Category>();
         Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        String sql = "select * from Category";
-        Query query = session.createSQLQuery(sql);
-        List<Category> list = ((NativeQuery) query).addEntity(Category.class).list();
-        session.getTransaction().commit();
+        List<Category> list = new ArrayList<>();
+        try{
+            session.beginTransaction();
+            String sql = "select * from Category c join Resource r on c.category_id = r.category_id";
+            Query query = session.createSQLQuery(sql);
+            List<Object[]> res = ((NativeQuery) query).addEntity(Category.class).addEntity(Resource.class).list();
+
+            for(Object[] objects : res) {
+                Category category = (Category) objects[0];
+                Set<Resource> set = new HashSet<>();
+                for(int i = 1; i < objects.length; i++) {
+                    set.add((Resource) objects[i]);
+                }
+                category.setResources(set);
+                list.add(category);
+            }
+
+            session.getTransaction().commit();
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return new ArrayList<>();
+        }
         return list;
     }
 

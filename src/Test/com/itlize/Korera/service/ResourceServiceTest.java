@@ -1,5 +1,6 @@
 package com.itlize.Korera.service;
 
+import com.itlize.Korera.entities.Category;
 import com.itlize.Korera.entities.Resource;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -18,7 +19,7 @@ public class ResourceServiceTest {
         for(int i = 0; i < 5; i++) {
             resource.setResourceName("resource " + i);
             resource.setResourceCode(String.valueOf(i * 10));
-            resource.setCategory_id(1);
+            resource.setCategory_id(new Category(1));
             int res = rs.addResource(resource);
             System.out.println(res);
         }
@@ -29,7 +30,7 @@ public class ResourceServiceTest {
         Resource resource = new Resource();
         resource.setResourceId(1);
         resource.setResourceName("hello");
-        resource.setCategory_id(2);
+        resource.setCategory_id(new Category(1));
         int res = rs.updateResource(resource);
         System.out.println(res);
     }
@@ -39,7 +40,7 @@ public class ResourceServiceTest {
         Resource resource = new Resource();
         resource.setResourceId(1);
         resource.setResourceName("hello11");
-        resource.setCategory_id(2);
+        resource.setCategory_id(new Category(1));
         int res = rs.updateResource(resource);
         System.out.println(res);
     }

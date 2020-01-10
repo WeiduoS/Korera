@@ -9,6 +9,7 @@
     <!--default use Spring EL expression-->
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')"/>
+        <csrf disabled="true"/>
     </http>
 
     <authentication-manager>

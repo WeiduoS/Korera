@@ -1,6 +1,7 @@
 package com.itlize.Korera.controller;
 
 import com.itlize.Korera.entities.Project;
+import com.itlize.Korera.entities.User;
 import com.itlize.Korera.service.ProjectServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,31 +31,33 @@ public class ProjectController {
     @Qualifier("ProjectServicesImpl")
     private ProjectServices projectServices;
 
-    // value, method, param, headers
-    // consumes, produces
     @RequestMapping(value = "/findAll", method = RequestMethod.GET)
-    public String findAll(Model model) {
-        if(projectServices == null) return "";
+    @ResponseBody
+    public List<Project> findAll() {
+        if(projectServices == null) return new ArrayList<>();
         List<Project> projects = projectServices.listProjects();
-        model.addAttribute("projects", projects);
-        return "projects/projects";
+        System.out.println(projects);
+//        model.addAttribute("projects", projects);
+        return projects;
     }
 
     @RequestMapping(value = "/findById/{project_id}", method = RequestMethod.GET)
-    public String findByID(@PathVariable("project_id")Integer project_id, Model model, HttpServletRequest request) {
-         if(projectServices == null || project_id == null) return "";
-        System.out.println("project find by id: " + project_id);
-        Project project = projectServices.getProjectById(project_id);
+    @ResponseBody
+    public Project findByID(@PathVariable("project_id")Integer project_id, Model model, HttpServletRequest request) {
+        if(projectServices == null || project_id == null) return new Project();
+//        Project project = projectServices.getProjectById(project_id);
+        Project project = projectServices.getProject(project_id);
         model.addAttribute("project", project);
-        System.out.println(project.toString());
-        return "projects/editProject";
+        return project;
     }
 
     @RequestMapping(value = "/findByName/{project_name}", method = RequestMethod.GET)
-    public String findByName (@PathVariable("project_name")String project_name) {
-        if(projectServices == null) return "";
+    @ResponseBody
+    public List<Project> findByName (@PathVariable("project_name")String project_name) {
+        if(projectServices == null) return new ArrayList<>();
         System.out.println("project find by name: " + project_name);
-        return "success";
+        List<Project> projects = projectServices.getProjectByName(project_name);
+        return projects;
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -64,15 +67,19 @@ public class ProjectController {
         return mv;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST )
-    public String addProject(Project project){
-        System.out.println(project.toString());
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String addProject(Project project, HttpServletRequest request){
+        Integer userId = Integer.valueOf(request.getParameter("user_id"));
+        if(userId != null) project.setUser(new User(userId, "test", "test"));
+        System.out.println("project: " + project);
         projectServices.addProject(project);
         return "redirect:/project/findAll";
     }
 
     @RequestMapping(value = "/update/{project_id}", method = RequestMethod.PUT)
-    public String updateProject(@PathVariable("project_id")String project_id, @ModelAttribute("project") Project project){
+    public String updateProject(@PathVariable("project_id")String project_id, @ModelAttribute("project") Project project, HttpServletRequest request){
+        Integer userId = Integer.valueOf(request.getParameter("user_id"));
+        if(userId != null) project.setUser(new User(userId, "test", "test"));
         System.out.println("update a project: " + project.toString());
         projectServices.saveOrUpdateProject(project);
         return "redirect:/project/findAll";
@@ -82,7 +89,8 @@ public class ProjectController {
     public void preUpdateProject(@RequestParam(value = "project_id", required = false) Integer project_id, Model model) {
         if(project_id != null) {
             Project project = projectServices.getProjectById(project_id);
-            model.addAttribute("project", project);
+            if(project == null)model.addAttribute("project", new Project());
+            else model.addAttribute("project", project);
             System.out.println("mode attribute project: " + project.toString());
         }
     }
@@ -90,7 +98,7 @@ public class ProjectController {
     @RequestMapping(value = "/delete/{project_id}", method = RequestMethod.DELETE)
     public String deleteProject(@PathVariable("project_id")Integer project_id){
         System.out.println("delete a project: " + project_id);
-        projectServices.removeProject(project_id);
+        projectServices.removeProject(new Project(project_id, "", new User()));
         return "redirect:/project/findAll";
     }
 

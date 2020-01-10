@@ -19,9 +19,11 @@ public interface ProjectServices {
 
     public Project getProjectById(Integer id);
 
+    public Project getProject(Integer id);
+
     public List<Project> getProjectByName(String project_name);
 
-    public int removeProject(Integer project_id);
+    public int removeProject(Project project);
 
     public List<Project> paginationProject(Integer startIndex, Integer pageSize);
 }

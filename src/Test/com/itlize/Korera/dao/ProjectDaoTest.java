@@ -1,6 +1,9 @@
 package com.itlize.Korera.dao;
 
+import com.itlize.Korera.entities.Category;
 import com.itlize.Korera.entities.Project;
+import com.itlize.Korera.entities.Resource;
+import com.itlize.Korera.entities.User;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -18,31 +21,26 @@ public class ProjectDaoTest {
 
     @Test
     public void addProjectTest() {
-        Project project = new Project();
-        for(int i = 1 ; i <= 1; i++) {
-            project.setProject_name("project" + i);
-            project.setUser_id(1);
-            int res = pd.addProject(project);
-            System.out.println("res: " + res);
-        }
+//        Project project = new Project("ptest", new User("xiaoming", "1231"));
+//        System.out.println(pd.addProject(project));
+//        Project project = new Project("ptest", new User("xiaoming", "1231"));
+        Project project = new Project("ptest", new User(1, "dsf", "12313"));
+        project.getResouces().add(new Resource("001", "res1", new Category("hhh")));
+        int res = pd.addProject(project);
+        System.out.println(res);
     }
 
     @Test
     public void updateProjectTest() {
-        Project project = new Project();
-        project.setProject_id(1);
-        project.setProject_name("hello");
-        project.setUser_id(1);
+        Project project = new Project(56, "ptest02", new User(14,"xiaoming", "1231"));
         int res = pd.updateProject(project);
         System.out.println("res: " + res);
     }
 
     @Test
     public void saveOrUpdateProjectTest() {
-        Project project = new Project();
-        project.setProject_name("hello");
-        project.setUser_id(1);
-        int res = pd.saveOrUpdateProject(project);
+        Project project = new Project(56, "ptest04", new User(14,"xiaoming", "1231"));
+        int res = pd.updateProject(project);
         System.out.println("res: " + res);
     }
 
@@ -54,7 +52,13 @@ public class ProjectDaoTest {
 
     @Test
     public void getProjectByIdTest() {
-        Project project = pd.getProjectById(1);
+        Project project = pd.getProjectById(13);
+        System.out.println(project.toString());
+    }
+
+    @Test
+    public void getProjectTest() {
+        Project project = pd.getProjectById(22);
         System.out.println(project.toString());
     }
 
@@ -66,7 +70,9 @@ public class ProjectDaoTest {
 
     @Test
     public void removeProjectTest() {
-        int res = pd.removeProject(1);
+        Project project = new Project(22, "qqq", new User());
+        project.getResouces().add(new Resource(35));
+        int res = pd.removeProject(project);
         System.out.println("res: " + res);
     }
 

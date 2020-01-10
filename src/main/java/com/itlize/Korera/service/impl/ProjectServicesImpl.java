@@ -1,6 +1,9 @@
 package com.itlize.Korera.service.impl;
 
+import com.itlize.Korera.dao.ColsDao;
 import com.itlize.Korera.dao.ProjectDao;
+import com.itlize.Korera.entities.Cols;
+import com.itlize.Korera.entities.Resource;
 import com.itlize.Korera.service.ProjectServices;
 import com.itlize.Korera.entities.Project;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +11,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Weiduo
@@ -21,10 +26,14 @@ public class ProjectServicesImpl implements ProjectServices {
     @Qualifier("ProjectDaoImpl")
     ProjectDao pd;
 
+    @Autowired
+    @Qualifier("ColsDaoImpl")
+    ColsDao cd;
+
     @Override
     public int addProject(Project project) {
         if(project == null) return -1;
-        int res = pd.addProject(project);
+        int res = pd.saveOrUpdateProject(project);
         return res;
     }
 
@@ -56,6 +65,18 @@ public class ProjectServicesImpl implements ProjectServices {
     }
 
     @Override
+    public Project getProject(Integer id) {
+        if(id == null || id < 0) return null;
+        Project project = pd.getProjectById(id);
+        for(Resource res : project.getResouces()) {
+            List<Cols> cols = cd.getColsById(project.getProject_id(), res.getResourceId());
+            res.setCols(cols);
+        }
+        return project;
+    }
+
+
+    @Override
     public List<Project> getProjectByName(String project_name) {
         if(project_name == null) return null;
         List<Project> res = pd.getProjectByName(project_name);
@@ -63,9 +84,9 @@ public class ProjectServicesImpl implements ProjectServices {
     }
 
     @Override
-    public int removeProject(Integer project_id) {
-        if(project_id == null) return -1;
-        int res = pd.removeProject(project_id);
+    public int removeProject(Project project) {
+        if(project == null) return -1;
+        int res = pd.removeProject(project);
         return res;
     }
 

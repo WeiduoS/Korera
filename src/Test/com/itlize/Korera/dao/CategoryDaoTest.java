@@ -1,11 +1,14 @@
 package com.itlize.Korera.dao;
 
 import com.itlize.Korera.entities.Category;
+import com.itlize.Korera.entities.Resource;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Weiduo
@@ -21,6 +24,12 @@ public class CategoryDaoTest {
         Category category = new Category();
         for(int i = 0; i < 10; i++) {
             category.setCategory_name("category: " + i);
+            Set<Resource> set = new HashSet<>();
+
+            for(int j = 0; j < 3; j++) {
+                set.add(new Resource("000", "000", category));
+            }
+            category.setResources(set);
             int res = cd.addCategory(category);
             System.out.println(res);
         }

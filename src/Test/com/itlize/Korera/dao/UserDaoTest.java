@@ -1,5 +1,6 @@
 package com.itlize.Korera.dao;
 
+import com.itlize.Korera.entities.Project;
 import com.itlize.Korera.entities.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @ContextConfiguration(locations = "classpath:config/applicationContext.xml")
@@ -30,6 +33,13 @@ public class UserDaoTest {
         for(int i = 1 ; i <= 1; i++) {
             user.setUser_name("User " + i);
             user.setPassword("password" +i);
+
+            Set<Project> set = new HashSet<>();
+            for(int j = 0; j < 5; j++) {
+                set.add(new Project("p" + i, user));
+            }
+
+            user.setProjects(set);
             int res = ud.addUser(user);
             System.out.println("res: " + res);
         }
@@ -58,7 +68,7 @@ public class UserDaoTest {
     @Test
     public void listUsersTest() {
         List<User> list = ud.listUsers();
-        System.out.println(list.toString());
+        System.out.println(list);
     }
 
     @Test

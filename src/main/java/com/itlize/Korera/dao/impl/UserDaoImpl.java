@@ -1,6 +1,7 @@
 package com.itlize.Korera.dao.impl;
 
 import com.itlize.Korera.dao.UserDao;
+import com.itlize.Korera.entities.Project;
 import com.itlize.Korera.entities.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository("UserDaoImpl")
 public class UserDaoImpl implements UserDao {
@@ -72,10 +75,24 @@ public class UserDaoImpl implements UserDao {
         if(sessionFactory == null) return new ArrayList<>();
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        String sql = "select * from User";
-        Query query = session.createSQLQuery(sql);
-        List<User> list = ((NativeQuery) query).addEntity(User.class).list();
+        String sql = "select * from User u join Project p on u.user_id = p.user_id";
+        Query query = session.createSQLQuery(sql).addEntity(User.class).addEntity(Project.class);
+        List<Object[]> res = ((NativeQuery) query).list();
+
+        List<User> list = new ArrayList<>();
+
+        for(Object[] objects : res) {
+            User user = (User) objects[0];
+            Set<Project> set = new HashSet<>();
+            for(int i = 1; i < objects.length; i++) {
+                set.add((Project) objects[i]);
+            }
+            user.setProjects(set);
+            list.add(user);
+        }
+
         session.getTransaction().commit();
+
         return list;
     }
 

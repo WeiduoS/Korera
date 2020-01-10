@@ -1,13 +1,19 @@
 package com.itlize.Korera.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(schema = "mydb_new", name="Resource")
 public class Resource implements Serializable{
+
     @Id
     @Column(name = "resource_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer resourceId;
 
     @Column(name = "resource_code")
@@ -16,22 +22,30 @@ public class Resource implements Serializable{
     @Column(name = "resource_name")
     private String resourceName;
 
-    @Column(name = "category_id")
-    private Integer category_id;
+    @ManyToOne
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "category_id")
+    private Category category_id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "project_id")
-//    private Project project;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "resources")
+    public Set<Project> projects;
 
-//        @ManyToOne
-//    @JoinColumn(name = "categoryId")
-//    private Category category;
-
-//    @Column(name = "category_id")
-//    private Integer categoryId;
+    @Transient
+    private List<Cols> cols;
 
     public Resource() {
 
+    }
+
+    public Resource(Integer resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public Resource(String resourceCode, String resourceName, Category category) {
+        this.resourceCode = resourceCode;
+        this.resourceName = resourceName;
+        this.category_id = category;
     }
 
     public Integer getResourceId() {
@@ -58,12 +72,28 @@ public class Resource implements Serializable{
         this.resourceName = resourceName;
     }
 
-    public Integer getCategory_id() {
+    public Category getCategory_id() {
         return category_id;
     }
 
-    public void setCategory_id(Integer category_id) {
+    public void setCategory_id(Category category_id) {
         this.category_id = category_id;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
+    }
+
+    public List<Cols> getCols() {
+        return cols;
+    }
+
+    public void setCols(List<Cols> cols) {
+        this.cols = cols;
     }
 
     @Override
@@ -72,7 +102,6 @@ public class Resource implements Serializable{
                 "resourceId=" + resourceId +
                 ", resourceCode='" + resourceCode + '\'' +
                 ", resourceName='" + resourceName + '\'' +
-                ", category_id=" + category_id +
                 '}';
     }
 }
