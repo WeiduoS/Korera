@@ -39,12 +39,35 @@ public class Cols {
     private Proj_res_mapping prm;
 
     public Cols() {
+
+    }
+
+    public Cols(Integer id) {
+        this.id = id;
     }
 
     public Cols(Integer id, Proj_res_mapping prm) {
         this.id = id;
         this.prm = prm;
     }
+
+    public Cols(Integer id, Proj_res_mapping prm, String field, String type, String formula, String value) {
+        this.id = id;
+        this.prm = prm;
+        this.field = field;
+        this.type = type;
+        this.formula = formula;
+        this.value = value;
+    }
+
+    public Cols(Integer id, String field, String type, String formula, String value) {
+        this.id = id;
+        this.field = field;
+        this.type = type;
+        this.formula = formula;
+        this.value = value;
+    }
+
 
     public Cols(Proj_res_mapping prm, String field, String type, String formula, String value) {
         this.prm = prm;

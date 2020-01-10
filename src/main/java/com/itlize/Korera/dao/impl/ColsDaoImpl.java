@@ -24,12 +24,38 @@ public class ColsDaoImpl implements ColsDao {
 
     @Override
     public int addCols(Cols cols) {
-        return 0;
+        if(sessionFactory == null) return -1;
+        Session session = sessionFactory.getCurrentSession();
+
+        try{
+            session.beginTransaction();
+            session.save(cols);
+            session.getTransaction().commit();
+            return 1;
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return -1;
+        }
+
     }
 
     @Override
     public int updateCols(Cols cols) {
-        return 0;
+        if(sessionFactory == null) return -1;
+        Session session = sessionFactory.getCurrentSession();
+
+        try{
+            session.beginTransaction();
+            session.update(cols);
+            session.getTransaction().commit();
+            return 1;
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return -1;
+        }
+
     }
 
     @Override
@@ -54,7 +80,38 @@ public class ColsDaoImpl implements ColsDao {
     }
 
     @Override
-    public int removeCols(Integer project_id, Integer resource_id) {
-        return 0;
+    public List<Cols> listCols() {
+        if(sessionFactory == null) return  null;
+        Session session = sessionFactory.getCurrentSession();
+        List<Cols> cols;
+        try{
+            session.beginTransaction();
+            String sql = "select * from Cols";
+            Query query = session.createSQLQuery(sql);
+            cols = (List<Cols>) ((NativeQuery) query).addEntity(Cols.class).list();
+            session.getTransaction().commit();
+            return cols;
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return new ArrayList<>();
+        }
+
+    }
+
+    @Override
+    public int removeCols(Cols cols) {
+        if(sessionFactory == null) return -1;
+        Session session = sessionFactory.getCurrentSession();
+        try{
+            session.beginTransaction();
+            session.remove(cols);
+            session.getTransaction().commit();
+            return 1;
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return -1;
+        }
     }
 }

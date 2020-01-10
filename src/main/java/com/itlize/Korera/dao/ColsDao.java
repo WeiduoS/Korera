@@ -17,8 +17,8 @@ public interface ColsDao {
 
     public List<Cols> getColsById(Integer project_id, Integer resource_id);
 
-    public int removeCols(Integer project_id, Integer resource_id);
+    public List<Cols> listCols();
 
-
+    public int removeCols(Cols cols);
 
 }

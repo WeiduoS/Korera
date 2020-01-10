@@ -21,7 +21,7 @@ public class Proj_res_mapping implements Serializable {
     private PRMPKey prmpKey;
 
     @JsonIgnore
-    @OneToMany(targetEntity = Cols.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Cols.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "prm")
     private Set<Cols> cols;
 
 

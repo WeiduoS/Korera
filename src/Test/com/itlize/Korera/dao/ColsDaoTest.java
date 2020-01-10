@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.beans.Transient;
 import java.util.List;
 
 /**
@@ -18,11 +19,15 @@ public class ColsDaoTest {
     ColsDao colsDao = (ColsDao) ac.getBean("ColsDaoImpl");
 
     @Test
-    public void addColsMappingTest() {
+    public void addColsTest() {
+        Cols cols = new Cols(new Proj_res_mapping(new PRMPKey(76, 72)), "field", "type", "formula", "value");
+        System.out.println(colsDao.addCols(cols));
     }
 
     @Test
     public void listColsTest() {
+        List<Cols> cols = colsDao.listCols();
+        System.out.println(cols);
     }
 
     @Test
@@ -33,6 +38,14 @@ public class ColsDaoTest {
     }
 
     @Test
-    public void removeMappingTest() {
+    public void updateColsTest() {
+        Cols cols = new Cols(17, new Proj_res_mapping(new PRMPKey(76, 72)), "field1", "type1", "formula1", "value1");
+        System.out.println(colsDao.updateCols(cols));
+    }
+
+    @Test
+    public void removeColsTest() {
+        Cols cols = new Cols(16);
+        System.out.println(colsDao.removeCols(cols));
     }
 }
