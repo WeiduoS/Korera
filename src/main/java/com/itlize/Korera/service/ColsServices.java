@@ -14,7 +14,9 @@ public interface ColsServices {
 
     public int updateCols(Cols cols);
 
-    public List<Cols> getColsById(Integer project_id, Integer resource_id);
+    public int saveOrUpdateCols(Cols cols);
 
-    public int removeCols(Integer project_id, Integer resource_id);
+    public Cols getColsById(Integer id);
+
+    public int removeCols(Cols cols);
 }

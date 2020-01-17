@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,18 +39,39 @@ public class CategoryDaoTest {
     @Test
     public void updateCategoryTest() {
         Category category = new Category();
-        category.setCategory_id(1);
-        category.setCategory_name("hello 01");
-        int res = cd.updateCategory(category);
-        System.out.println(res);
+        for(int i = 1; i <= 1; i++) {
+            category.setCategory_id(i);
+            category.setCategory_name("category: " + i * 10);
+            Set<Resource> set = new HashSet<>();
+
+            for(int j = 1; j <= 3; j++) {
+                set.add(new Resource(j, "0001", "0001", category));
+            }
+            category.setResources(set);
+            int res = cd.addCategory(category);
+            System.out.println(res);
+        }
     }
 
     @Test
     public void saveOrUpdateCategoryTest() {
-        Category category = new Category();
-        category.setCategory_name("hello 01");
-        int res = cd.saveOrUpdateCategory(category);
-        System.out.println(res);
+        Category category = new Category(1, "1000");
+
+        for(int i = 1; i <= 1; i++) {
+            Set<Resource> set = new HashSet<>();
+
+            for(int j = 1; j <= 3; j++) {
+                set.add(new Resource(j, "0002", "0002", category));
+            }
+
+            for(int j = 1; j <= 3; j++) {
+                set.add(new Resource( "0001", "0001", category));
+            }
+
+            category.setResources(set);
+            int res = cd.saveOrUpdateCategory(category);
+            System.out.println(res);
+        }
     }
 
     @Test
@@ -66,16 +88,18 @@ public class CategoryDaoTest {
 
     @Test
     public void getCategoryByNameTest() {
-        List<Category> list = cd.getCategoryByName("category: 1");
+        List<Category> list = cd.getCategoryByName("1000");
         System.out.println(list);
     }
 
     @Test
     public void removeCategoryTest() {
-        Category category = new Category();
-        category.setCategory_id(11);
-        category.setCategory_name("hello 01");
-        int res = cd.removeCategories(category);
+        cd.removeCategories(cd.getCategoryById(33));
+    }
+
+    @Test
+    public void getCategorySizeTest(){
+        BigInteger res = cd.getCategorySize();
         System.out.println(res);
     }
 

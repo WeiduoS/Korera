@@ -2,14 +2,15 @@ package com.itlize.Korera.service.impl;
 
 import com.itlize.Korera.dao.ResourceDao;
 import com.itlize.Korera.entities.Resource;
-import com.itlize.Korera.service.ResourceService;
+import com.itlize.Korera.service.ResourceServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-@Service("ResourceServiceImpl")
-public class ResourceServiceImpl implements ResourceService {
+@Service("ResourceServicesImpl")
+public class ResourceServicesImpl implements ResourceServices {
     @Autowired
     ResourceDao rd;
 
@@ -60,6 +61,11 @@ public class ResourceServiceImpl implements ResourceService {
         if(resource == null) return -1;
         int res = rd.removeResource(resource);
         return res;
+    }
+
+    @Override
+    public BigInteger getResourceSize() {
+        return rd.getResourceSize();
     }
 
     @Override

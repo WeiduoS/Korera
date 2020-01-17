@@ -58,9 +58,9 @@ public class UserController {
 
     @RequestMapping(value = "/remove/{user_id}", method = RequestMethod.DELETE)
     public String removeUser(@PathVariable("user_id") Integer user_id){
-        if(userServices == null) return "error";
-        User user = userServices.getUserById(user_id);
-        userServices.removeUser(user_id);
+//        if(userServices == null) return "error";
+//        User user = userServices.getUserById(user_id);
+//        userServices.removeUser(user_id);
         return "redirect:/user/findAll";
     }
 

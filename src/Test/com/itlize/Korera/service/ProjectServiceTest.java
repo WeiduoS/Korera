@@ -41,7 +41,7 @@ public class ProjectServiceTest {
         Project project = new Project();
         project.setProject_id(1);
         project.setProject_name("hello2222" + 101);
-        project.setUser(new User(1, "", ""));
+//        project.setUser(new User(1, "", ""));
         int res = ps.updateProject(project);
         System.out.println("res: " + res);
     }
@@ -88,7 +88,7 @@ public class ProjectServiceTest {
 //    }
     @Test
     public void getProjectTest() {
-        Project project = ps.getProject(22);
+        Project project = ps.getProjectById(22);
         System.out.println(project.toString());
     }
 

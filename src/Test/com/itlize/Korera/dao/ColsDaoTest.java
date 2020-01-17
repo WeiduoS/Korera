@@ -1,13 +1,11 @@
 package com.itlize.Korera.dao;
 
 import com.itlize.Korera.entities.Cols;
-import com.itlize.Korera.entities.PRMPKey;
-import com.itlize.Korera.entities.Proj_res_mapping;
+import com.itlize.Korera.entities.ProjectResource;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.beans.Transient;
 import java.util.List;
 
 /**
@@ -20,8 +18,10 @@ public class ColsDaoTest {
 
     @Test
     public void addColsTest() {
-        Cols cols = new Cols(new Proj_res_mapping(new PRMPKey(76, 72)), "field", "type", "formula", "value");
-        System.out.println(colsDao.addCols(cols));
+        for(int i = 1; i <= 5; i++) {
+            Cols cols = new Cols("1", "1", "1", "1", new ProjectResource(6, 16,5));
+            System.out.println(colsDao.addCols(cols));
+        }
     }
 
     @Test
@@ -32,15 +32,21 @@ public class ColsDaoTest {
 
     @Test
     public void getColsByIdTest() {
-        int project_id = 22, resource_id = 35;
-        List<Cols> cols = colsDao.getColsById(project_id, resource_id);
+        Cols cols = colsDao.getColsById(16);
         System.out.println(cols);
     }
 
     @Test
     public void updateColsTest() {
-        Cols cols = new Cols(17, new Proj_res_mapping(new PRMPKey(76, 72)), "field1", "type1", "formula1", "value1");
-        System.out.println(colsDao.updateCols(cols));
+
+    }
+
+    @Test
+    public void saveOrupdateColsTest() {
+        for(int i = 1; i <= 5; i++) {
+            Cols cols = new Cols("1", "1", "1", "1", new ProjectResource(6, 16,5));
+            System.out.println(colsDao.addCols(cols));
+        }
     }
 
     @Test

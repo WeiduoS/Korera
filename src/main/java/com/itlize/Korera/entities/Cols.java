@@ -1,8 +1,8 @@
 package com.itlize.Korera.entities;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author Weiduo
@@ -10,8 +10,8 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(schema = "mydb_new", name="cols")
-public class Cols {
+@Table(schema = "KoreraDB", name="cols")
+public class Cols implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -30,35 +30,33 @@ public class Cols {
     @Column(name = "value")
     private String value;
 
+    @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "pr_id", insertable = true, updatable = true, nullable = true)
+    private ProjectResource projectResource;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name = "project_id"),
-            @JoinColumn(name = "resource_id")
-    })
-    private Proj_res_mapping prm;
 
     public Cols() {
-
     }
 
     public Cols(Integer id) {
         this.id = id;
     }
 
-    public Cols(Integer id, Proj_res_mapping prm) {
-        this.id = id;
-        this.prm = prm;
-    }
-
-    public Cols(Integer id, Proj_res_mapping prm, String field, String type, String formula, String value) {
-        this.id = id;
-        this.prm = prm;
+    public Cols(String field, String type, String formula, String value) {
         this.field = field;
         this.type = type;
         this.formula = formula;
         this.value = value;
     }
+
+    public Cols(String field, String type, String formula, String value, ProjectResource projectResource) {
+        this.field = field;
+        this.type = type;
+        this.formula = formula;
+        this.value = value;
+        this.projectResource = projectResource;
+    }
+
 
     public Cols(Integer id, String field, String type, String formula, String value) {
         this.id = id;
@@ -68,13 +66,13 @@ public class Cols {
         this.value = value;
     }
 
-
-    public Cols(Proj_res_mapping prm, String field, String type, String formula, String value) {
-        this.prm = prm;
+    public Cols(Integer id, String field, String type, String formula, String value, ProjectResource projectResource) {
+        this.id = id;
         this.field = field;
         this.type = type;
         this.formula = formula;
         this.value = value;
+        this.projectResource = projectResource;
     }
 
     public Integer getId() {
@@ -117,12 +115,30 @@ public class Cols {
         this.value = value;
     }
 
-    public Proj_res_mapping getPrm() {
-        return prm;
+    public ProjectResource getProjectResource() {
+        return projectResource;
     }
 
-    public void setPrm(Proj_res_mapping prm) {
-        this.prm = prm;
+    public void setProjectResource(ProjectResource projectResource) {
+        this.projectResource = projectResource;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cols cols = (Cols) o;
+        return Objects.equals(id, cols.id) &&
+                Objects.equals(field, cols.field) &&
+                Objects.equals(type, cols.type) &&
+                Objects.equals(formula, cols.formula) &&
+                Objects.equals(value, cols.value);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, field, type, formula, value);
     }
 
     @Override

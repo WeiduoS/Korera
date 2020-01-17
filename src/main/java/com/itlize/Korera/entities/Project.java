@@ -1,7 +1,7 @@
 package com.itlize.Korera.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,8 +13,12 @@ import java.util.Set;
  * @date 2019/12/30 - 3:54 PM
  */
 @Entity
-@Table(schema = "mydb", name="Project")
+@Table(schema = "KoreraDB", name="project")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "project_id")
 public class Project implements Serializable {
+
     @Id
     @Column(name="project_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,35 +27,42 @@ public class Project implements Serializable {
     @Column(name="project_name")
     private String project_name;
 
-    @ManyToOne
-    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "user_id")
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = true, updatable = false, nullable = true)
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JoinTable(name = "proj_res_mapping",
-            joinColumns = {@JoinColumn(name = "project_id", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "resource_id", nullable = false, updatable = false)})
-    private Set<Resource> resources;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "project_resource",
+            joinColumns = {@JoinColumn(name = "project_id", nullable = true, insertable = true, updatable = true)},
+            inverseJoinColumns = {@JoinColumn(name = "resource_id", nullable = true, insertable = true, updatable = true)})
+    private Set<Resource> resources = new HashSet<>();
 
     public Project() {
-        this.resources = new HashSet<>();
+
+    }
+
+    public Project(Integer project_id) {
+        this.project_id = project_id;
+    }
+
+    public Project(String project_name, User user) {
+        this.project_name = project_name;
+        this.user = user;
+    }
+
+    public Project(Integer project_id, String project_name) {
+        this.project_id = project_id;
+        this.project_name = project_name;
     }
 
     public Project(Integer project_id, String project_name, User user) {
         this.project_id = project_id;
         this.project_name = project_name;
         this.user = user;
-        this.resources = new HashSet<>();
     }
 
-
-    public Project(String project_name, User user) {
-        this.project_name = project_name;
-        this.user = user;
-        this.resources = new HashSet<>();
-    }
 
     public Integer getProject_id() {
         return project_id;
@@ -90,7 +101,7 @@ public class Project implements Serializable {
         return "Project{" +
                 "project_id=" + project_id +
                 ", project_name='" + project_name + '\'' +
-                ", resouces=" + resources +
+                ", resources=" + resources +
                 '}';
     }
 }

@@ -79,35 +79,20 @@ public class ProjectDaoImpl implements ProjectDao {
     public List<Project> listProjects() {
         if(sessionFactory == null) return new ArrayList<Project>();
         Session session = sessionFactory.getCurrentSession();
-        List<Project> list = new ArrayList<>();
+        List<Project> list;
 
         try{
             session.beginTransaction();
-//            String sql = "select p.project_id, p.project_name, p.user_id, r.resource_id, r.resource_code, r.resource_name, r.category_id from Project p " +
-//                    "join proj_res_mapping prm " +
-//                    "on p.project_id = prm.project_id " +
-//                    "join Resource r " +
-//                    "on r.resource_id = prm.resource_id";
             String sql = "select * from Project";
             Query query = session.createSQLQuery(sql);
             list = (List<Project>) ((NativeQuery) query).addEntity(Project.class).list();
-//            List<Object[]> res = ((NativeQuery) query).addEntity(Project.class).addEntity(Resource.class).list();
-//
-//            for(Object[] objects : res) {
-//                Project project = (Project) objects[0];
-//                for(int i = 1; i < objects.length; i++) {
-//                    project.getResouces().add((Resource) objects[i]);
-//                }
-//                list.add(project);
-//            }
             session.getTransaction().commit();
+            return list == null ? new ArrayList<>() : list;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return new ArrayList<>();
         }
-
-        return list;
     }
 
 
@@ -115,12 +100,12 @@ public class ProjectDaoImpl implements ProjectDao {
     public Project getProjectById(Integer id) {
         if(sessionFactory == null) return null;
         Session session = sessionFactory.getCurrentSession();
-        Project project = null;
+        Project project;
         try{
             session.beginTransaction();
             project = session.get(Project.class, id);
             session.getTransaction().commit();
-            return project;
+            return project == null ? new Project() : project;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
@@ -128,47 +113,20 @@ public class ProjectDaoImpl implements ProjectDao {
         }
     }
 
-    @Override
-    public Project getProject(Integer id) {
-        if(sessionFactory == null) return null;
-        Session session = sessionFactory.getCurrentSession();
-        Project project = null;
-        try{
-            session.beginTransaction();
-            String sql = "select p.project_id, p.project_name, p.user_id, r.resource_id, r.resource_code, r.resource_name, r.category_id from Project p " +
-                    "join proj_res_mapping prm " +
-                    "on ? = prm.project_id " +
-                    "join Resource r " +
-                    "on r.resource_id = prm.resource_id";
-            Query query = session.createSQLQuery(sql);
-            List<Object[]> res = ((NativeQuery) query).addEntity(Project.class).addEntity(Resource.class).list();
-            for(Object[] objects : res) {
-                project = (Project) objects[0];
-                for(int i = 1; i < objects.length; i++) {
-                    project.getResouces().add((Resource) objects[i]);
-                }
-            }
-            session.getTransaction().commit();
-            return project;
-        }catch (Exception e) {
-            e.getStackTrace();
-            session.getTransaction().rollback();
-            return null;
-        }
-    }
+
 
     @Override
     public List<Project> getProjectByName(String project_name) {
         if(sessionFactory == null) return new ArrayList<>();
         Session session = sessionFactory.getCurrentSession();
-        List<Project> list = null;
+        List<Project> list;
         try{
             session.beginTransaction();
             String sql = "select * from Project where project_name=?";
             Query query = session.createSQLQuery(sql).setParameter(1, project_name);
             list = ((NativeQuery) query).addEntity(Project.class).list();
             session.getTransaction().commit();
-            return list;
+            return list == null ? new ArrayList<>() : list;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
@@ -182,9 +140,6 @@ public class ProjectDaoImpl implements ProjectDao {
         Session session = sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
-//            String sql = "delete from Project where project_id=?";
-//            Query query = session.createSQLQuery(sql).setParameter(1, project_id);
-//            int res = query.executeUpdate();
             session.remove(project);
             session.getTransaction().commit();
             return 1;

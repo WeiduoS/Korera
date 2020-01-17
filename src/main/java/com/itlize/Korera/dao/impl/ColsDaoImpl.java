@@ -59,23 +59,38 @@ public class ColsDaoImpl implements ColsDao {
     }
 
     @Override
-    public List<Cols> getColsById(Integer project_id, Integer resource_id) {
-        if(sessionFactory == null) return  null;
+    public int saveOrUpdateCols(Cols cols) {
+        if(sessionFactory == null) return -1;
         Session session = sessionFactory.getCurrentSession();
-        List<Cols> cols;
 
         try{
             session.beginTransaction();
-            String sql = "select * from Cols where project_id=? and resource_id=?";
-            Query query = session.createSQLQuery(sql);
-            cols = (List<Cols>) ((NativeQuery) query).addEntity(Cols.class).
-                    setParameter(1, project_id).setParameter(2, resource_id).list();
+            session.saveOrUpdate(cols);
+            session.getTransaction().commit();
+            return 1;
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return -1;
+        }
+
+    }
+
+    @Override
+    public Cols getColsById(Integer id) {
+        if(sessionFactory == null) return  null;
+        Session session = sessionFactory.getCurrentSession();
+        Cols cols;
+
+        try{
+            session.beginTransaction();
+            cols = session.get(Cols.class, id);
             session.getTransaction().commit();
             return cols;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
-            return new ArrayList<>();
+            return null;
         }
     }
 

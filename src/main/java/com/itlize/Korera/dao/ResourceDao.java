@@ -2,6 +2,7 @@ package com.itlize.Korera.dao;
 
 import com.itlize.Korera.entities.Resource;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface ResourceDao {
@@ -16,6 +17,8 @@ public interface ResourceDao {
     public Resource getResourceById(Integer id);
 
     public List<Resource> getResourceByName(String resource_name);
+
+    public BigInteger getResourceSize();
 
     public int removeResource(Resource resource);
 

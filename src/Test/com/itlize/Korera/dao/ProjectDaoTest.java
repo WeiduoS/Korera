@@ -21,27 +21,32 @@ public class ProjectDaoTest {
 
     @Test
     public void addProjectTest() {
-//        Project project = new Project("ptest", new User("xiaoming", "1231"));
-//        System.out.println(pd.addProject(project));
-//        Project project = new Project("ptest", new User("xiaoming", "1231"));
-        Project project = new Project("ptest", new User(1, "dsf", "12313"));
-        project.getResouces().add(new Resource("001", "res1", new Category("hhh")));
-        int res = pd.addProject(project);
-        System.out.println(res);
+        Project project = new Project("ptest02", new User(4));
+        project.getResouces().add(new Resource(5));
+        System.out.println(pd.addProject(project));
     }
 
     @Test
     public void updateProjectTest() {
-        Project project = new Project(56, "ptest02", new User(14,"xiaoming", "1231"));
+        Project project = new Project(1, "ptest02", new User(1,"xiaoming", "1231"));
+        project.getResouces().add(new Resource(1));
         int res = pd.updateProject(project);
         System.out.println("res: " + res);
     }
 
     @Test
     public void saveOrUpdateProjectTest() {
-        Project project = new Project(56, "ptest04", new User(14,"xiaoming", "1231"));
-        int res = pd.updateProject(project);
-        System.out.println("res: " + res);
+//        for(int i = 1; i <= 5; i++) {
+//            Project p = new Project(i, "tests", new User(1,"xiaoming", "1231"));
+//            System.out.println(pd.saveOrUpdateProject(p));
+//        }
+//        for(int i = 1; i <= 5; i++) {
+//            Project p = new Project("xiaoming project", new User(1,"xiaoming", "1231"));
+//            System.out.println(pd.saveOrUpdateProject(p));
+//        }
+        Project project = new Project(37,"p4new01", new User(4));
+        project.getResouces().add(new Resource(5, "000", "000", new Category(2, "")));
+        System.out.println(pd.saveOrUpdateProject(project));
     }
 
     @Test
@@ -52,7 +57,7 @@ public class ProjectDaoTest {
 
     @Test
     public void getProjectByIdTest() {
-        Project project = pd.getProjectById(13);
+        Project project = pd.getProjectById(1);
         System.out.println(project.toString());
     }
 
@@ -63,16 +68,14 @@ public class ProjectDaoTest {
     }
 
     @Test
-    public void getProjectByIdName() {
+    public void getProjectByName() {
         List<Project> list = pd.getProjectByName("hello");
         System.out.println(list);
     }
 
     @Test
     public void removeProjectTest() {
-        Project project = new Project(22, "qqq", new User());
-        project.getResouces().add(new Resource(35));
-        int res = pd.removeProject(project);
+        int res = pd.removeProject(pd.getProjectById(26));
         System.out.println("res: " + res);
     }
 

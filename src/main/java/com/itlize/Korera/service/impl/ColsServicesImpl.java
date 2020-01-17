@@ -14,8 +14,8 @@ import java.util.List;
  * @author Weiduo
  * @date 2020/1/10 - 8:47 AM
  */
-@Service(value = "ColsServiceImpl")
-public class ColsServiceImpl implements ColsServices {
+@Service(value = "ColsServicesImpl")
+public class ColsServicesImpl implements ColsServices {
 
     @Autowired
     @Qualifier("ColsDaoImpl")
@@ -23,23 +23,32 @@ public class ColsServiceImpl implements ColsServices {
 
     @Override
     public int addCols(Cols cols) {
-        return 0;
+        if(cols == null) return -1;
+        return cd.addCols(cols);
     }
 
     @Override
     public int updateCols(Cols cols) {
-        return 0;
+        if(cols == null) return -1;
+        return cd.updateCols(cols);
     }
 
     @Override
-    public List<Cols> getColsById(Integer project_id, Integer resource_id) {
-        if(project_id == null || resource_id == null || project_id < 0 || resource_id < 0) return new ArrayList<>();
-        return cd.getColsById(project_id, resource_id);
+    public int saveOrUpdateCols(Cols cols) {
+        if(cols == null) return -1;
+        return cd.saveOrUpdateCols(cols);
     }
 
     @Override
-    public int removeCols(Integer project_id, Integer resource_id) {
-        return 0;
+    public Cols getColsById(Integer id) {
+        if(id == null || id < 0) return null;
+        return cd.getColsById(id);
+    }
+
+    @Override
+    public int removeCols(Cols cols) {
+        if(cols == null ) return -1;
+        return cd.removeCols(cols);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.itlize.Korera.dao;
 
 import com.itlize.Korera.entities.Cols;
-import com.itlize.Korera.entities.Proj_res_mapping;
 
 import java.util.List;
 
@@ -15,7 +14,9 @@ public interface ColsDao {
 
     public int updateCols(Cols cols);
 
-    public List<Cols> getColsById(Integer project_id, Integer resource_id);
+    public int saveOrUpdateCols(Cols cols);
+
+    public Cols getColsById(Integer id);
 
     public List<Cols> listCols();
 

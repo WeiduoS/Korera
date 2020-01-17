@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -75,22 +76,9 @@ public class UserDaoImpl implements UserDao {
         if(sessionFactory == null) return new ArrayList<>();
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        String sql = "select * from User u join Project p on u.user_id = p.user_id";
-        Query query = session.createSQLQuery(sql).addEntity(User.class).addEntity(Project.class);
-        List<Object[]> res = ((NativeQuery) query).list();
-
-        List<User> list = new ArrayList<>();
-
-        for(Object[] objects : res) {
-            User user = (User) objects[0];
-            Set<Project> set = new HashSet<>();
-            for(int i = 1; i < objects.length; i++) {
-                set.add((Project) objects[i]);
-            }
-            user.setProjects(set);
-            list.add(user);
-        }
-
+        String sql = "select * from User";
+        Query query = session.createSQLQuery(sql).addEntity(User.class);
+        List<User> list = ((NativeQuery) query).list();
         session.getTransaction().commit();
 
         return list;
@@ -114,39 +102,55 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getUserByName(String name) {
-        if(name == null) return new ArrayList<>();
+    public User getUserByName(String name) {
+        if(name == null) return null;
         Session session = sessionFactory.getCurrentSession();
-        List<User> list = null;
         try{
             session.beginTransaction();
             String sql = "select * from User where user_name=?";
             Query query = session.createSQLQuery(sql).setParameter(1, name);
-            list = ((NativeQuery) query).addEntity(User.class).list();
+            List<User> list = ((NativeQuery) query).addEntity(User.class).list();
+            if(list.size() >= 2) throw new Exception("multi user share the same username");
             session.getTransaction().commit();
-            return list;
+            return list.get(0);
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
-            return new ArrayList<>();
+            return null;
         }
     }
 
     @Override
-    public int removeUser(Integer user_id) {
+    public int removeUser(User user) {
         if(sessionFactory == null) return -1;
         Session session = sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
-            String sql = "delete from User where user_id=?";
-            Query query = session.createSQLQuery(sql).setParameter(1, user_id);
-            int res = query.executeUpdate();
+            session.remove(user);
             session.getTransaction().commit();
-            return res;
+            return 1;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
             return -1;
+        }
+    }
+
+    @Override
+    public BigInteger getUserSize() {
+        if(sessionFactory == null) return BigInteger.valueOf(-1);
+        Session session = sessionFactory.getCurrentSession();
+        try{
+            session.beginTransaction();
+            String sql = "select count(user_id) from User";
+            Query query = session.createSQLQuery(sql);
+            List<BigInteger> list = query.list();
+            session.getTransaction().commit();
+            return list.get(0);
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return BigInteger.valueOf(-1);
         }
     }
 

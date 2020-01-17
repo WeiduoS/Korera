@@ -2,7 +2,9 @@ package com.itlize.Korera.service.impl;
 
 import com.itlize.Korera.dao.ColsDao;
 import com.itlize.Korera.dao.ProjectDao;
+import com.itlize.Korera.dao.ProjectResourceDao;
 import com.itlize.Korera.entities.Cols;
+import com.itlize.Korera.entities.ProjectResource;
 import com.itlize.Korera.entities.Resource;
 import com.itlize.Korera.service.ProjectServices;
 import com.itlize.Korera.entities.Project;
@@ -26,9 +28,10 @@ public class ProjectServicesImpl implements ProjectServices {
     @Qualifier("ProjectDaoImpl")
     ProjectDao pd;
 
+
     @Autowired
-    @Qualifier("ColsDaoImpl")
-    ColsDao cd;
+    @Qualifier("ProjectResourceDaoImpl")
+    ProjectResourceDao prd;
 
     @Override
     public int addProject(Project project) {
@@ -60,17 +63,14 @@ public class ProjectServicesImpl implements ProjectServices {
     @Override
     public Project getProjectById(Integer id) {
         if(id == null || id < 0) return null;
-        Project res = pd.getProjectById(id);
-        return res;
-    }
-
-    @Override
-    public Project getProject(Integer id) {
-        if(id == null || id < 0) return null;
         Project project = pd.getProjectById(id);
         for(Resource res : project.getResouces()) {
-            List<Cols> cols = cd.getColsById(project.getProject_id(), res.getResourceId());
-            res.setCols(cols);
+            List<ProjectResource> prs = prd.getMappingById(
+                    project.getProject_id(),
+                    res.getResourceId());
+            for(ProjectResource pr : prs) {
+                res.setCols(pr.getCols());
+            }
         }
         return project;
     }

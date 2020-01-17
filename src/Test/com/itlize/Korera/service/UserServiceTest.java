@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class UserServiceTest {
     @Test
     public void updateUserTest() {
         User user = new User();
-        user.setUser_Id(1);
+        user.setUser_id(1);
         user.setUser_name("test 01");
         user.setPassword("test 01");
         int res = us.updateUser(user);
@@ -48,7 +49,7 @@ public class UserServiceTest {
     @Test
     public void saveOrUpdateUserTest() {
         User user = new User();
-        user.setUser_Id(1);
+        user.setUser_id(1);
         user.setUser_name("test 01");
         user.setPassword("test 01");
         int res = us.saveOrUpdateUser(user);
@@ -70,14 +71,14 @@ public class UserServiceTest {
 
 
     @Test
-    public void getUserByIdName() {
-        List<User> list = us.getUserByName("test 01");
-        System.out.println(list);
+    public void getUserByName() {
+        User user = us.getUserByName("test 01");
+        System.out.println(user);
     }
 
     @Test
     public void removeUserTest() {
-        int res = us.removeUser(4);
+        int res = us.removeUser(new User(3));
         System.out.println("res: " + res);
     }
 
@@ -87,4 +88,12 @@ public class UserServiceTest {
         List<User> list = us.paginationUser(pageIndex, pageSize);
         System.out.println(list);
     }
+
+    @Test
+    public void encodeTest() {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        System.out.println("encode password: " + passwordEncoder.encode("hello"));
+    }
+
+
 }

@@ -9,6 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 @Repository("ResourceDaoImpl")
@@ -72,9 +73,9 @@ public class ResourceDaoImpl implements ResourceDao{
         List<Resource> list = null;
         try {
             session.beginTransaction();
-            String sql = "from Resource";
-            Query query = session.createQuery(sql);
-            list = query.list();
+            String sql = "select * from Resource";
+            Query query = session.createSQLQuery(sql);
+            list = ((NativeQuery) query).addEntity(Resource.class).list();
             session.getTransaction().commit();
         }catch (Exception e) {
             e.getStackTrace();
@@ -109,8 +110,8 @@ public class ResourceDaoImpl implements ResourceDao{
         List<Resource> list = null;
         try {
             session.beginTransaction();
-            String sql = "from Resource r where r.resourceName = :name";
-            Query query = session.createQuery(sql).setParameter("name",resource_name);
+            String sql = "select * from Resource where resource_name = ?";
+            Query query = session.createSQLQuery(sql).setParameter(1,resource_name);
             list = query.list();
             session.getTransaction().commit();
         }catch (Exception e) {
@@ -122,12 +123,30 @@ public class ResourceDaoImpl implements ResourceDao{
     }
 
     @Override
+    public BigInteger getResourceSize() {
+        if(sessionFactory == null) return BigInteger.valueOf(-1);
+        Session session = sessionFactory.getCurrentSession();
+        try{
+            session.beginTransaction();
+            String sql = "select count(resource_id) from Resource";
+            Query query = session.createSQLQuery(sql);
+            List<BigInteger> list = query.list();
+            session.getTransaction().commit();
+            return list.get(0);
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return BigInteger.valueOf(-1);
+        }
+    }
+
+    @Override
     public int removeResource(Resource resource) {
         if(sessionFactory == null) return -1;
         Session session = sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
-            session.delete(resource);
+            session.remove(resource);
             session.getTransaction().commit();
         }catch (Exception e) {
             e.getStackTrace();
@@ -145,7 +164,9 @@ public class ResourceDaoImpl implements ResourceDao{
         try{
             session.beginTransaction();
             int limit = (startIndex - 1) * pageSize;
-            Query query = session.createQuery("from Resource ").setFirstResult(limit).setMaxResults(pageSize);
+            Query query = session.createSQLQuery("selet * from Resource ")
+                    .setFirstResult(limit)
+                    .setMaxResults(pageSize);
             list = query.list();
             session.getTransaction().commit();
         }catch (Exception e){

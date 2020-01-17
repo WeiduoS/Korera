@@ -19,8 +19,6 @@ public interface ProjectServices {
 
     public Project getProjectById(Integer id);
 
-    public Project getProject(Integer id);
-
     public List<Project> getProjectByName(String project_name);
 
     public int removeProject(Project project);

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +66,11 @@ public class CategoryServicesImpl implements CategoryServices {
     public int removeCategories(Category category) {
         if(category == null) return -1;
         return cd.removeCategories(category);
+    }
+
+    @Override
+    public BigInteger getCategorySize() {
+        return cd.getCategorySize();
     }
 
     @Override

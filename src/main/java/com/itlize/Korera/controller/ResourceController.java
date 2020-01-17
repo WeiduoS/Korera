@@ -1,7 +1,7 @@
 package com.itlize.Korera.controller;
 
 import com.itlize.Korera.entities.Resource;
-import com.itlize.Korera.service.ResourceService;
+import com.itlize.Korera.service.ResourceServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/resource")
 public class ResourceController {
     @Autowired
-    private ResourceService resourceService;
+    private ResourceServices resourceService;
 
     @RequestMapping(value = {"/findall"},method = RequestMethod.GET)
     @ResponseBody

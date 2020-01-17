@@ -2,6 +2,7 @@ package com.itlize.Korera.service;
 
 import com.itlize.Korera.entities.Category;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -23,6 +24,8 @@ public interface CategoryServices {
     public List<Category> getCategoryByName(String project_name);
 
     public int removeCategories(Category category);
+
+    public BigInteger getCategorySize();
 
     public List<Category> paginationCategory(Integer startIndex, Integer pageSize);
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public class ResourceServiceTest {
 
     ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:/config/applicationContext.xml");
-    ResourceService rs = (ResourceService) ac.getBean("ResourceServiceImpl");
+    ResourceServices rs = (ResourceServices) ac.getBean("ResourceServiceImpl");
 
     @Test
     public void addResourceTest() {

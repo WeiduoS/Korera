@@ -2,8 +2,6 @@ package com.itlize.Korera.dao.impl;
 
 import com.itlize.Korera.dao.CategoryDao;
 import com.itlize.Korera.entities.Category;
-import com.itlize.Korera.entities.Project;
-import com.itlize.Korera.entities.Resource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
@@ -11,10 +9,9 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Weiduo
@@ -82,20 +79,9 @@ public class CategoryDaoImpl implements CategoryDao {
         List<Category> list = new ArrayList<>();
         try{
             session.beginTransaction();
-            String sql = "select * from Category c join Resource r on c.category_id = r.category_id";
+            String sql = "select * from Category";
             Query query = session.createSQLQuery(sql);
-            List<Object[]> res = ((NativeQuery) query).addEntity(Category.class).addEntity(Resource.class).list();
-
-            for(Object[] objects : res) {
-                Category category = (Category) objects[0];
-                Set<Resource> set = new HashSet<>();
-                for(int i = 1; i < objects.length; i++) {
-                    set.add((Resource) objects[i]);
-                }
-                category.setResources(set);
-                list.add(category);
-            }
-
+            list = ((NativeQuery) query).addEntity(Category.class).list();
             session.getTransaction().commit();
         }catch (Exception e) {
             e.getStackTrace();
@@ -154,6 +140,24 @@ public class CategoryDaoImpl implements CategoryDao {
             e.getStackTrace();
             session.getTransaction().rollback();
             return -1;
+        }
+    }
+
+    @Override
+    public BigInteger getCategorySize() {
+        if(sessionFactory == null) return BigInteger.valueOf(-1);
+        Session session = sessionFactory.getCurrentSession();
+        try{
+            session.beginTransaction();
+            String sql = "select count(category_id) from Category";
+            Query query = session.createSQLQuery(sql);
+            List<BigInteger> list = query.list();
+            session.getTransaction().commit();
+            return list.get(0);
+        }catch (Exception e) {
+            e.getStackTrace();
+            session.getTransaction().rollback();
+            return BigInteger.valueOf(-1);
         }
     }
 
