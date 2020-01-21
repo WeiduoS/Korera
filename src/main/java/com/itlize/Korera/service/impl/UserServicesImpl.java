@@ -34,7 +34,7 @@ public class UserServicesImpl implements UserServices {
         if(user == null) return -1;
         User u = ud.getUserByName(user.getUser_name());
         int res = -1;
-        if(u != null) return res;
+        if(u != null) return -2;
         else{
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             res = ud.addUser(user);

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -95,6 +96,7 @@ public class UserDaoTest {
     @Test
     public void listUsersTest() {
         List<User> list = ud.listUsers();
+
         System.out.println(list);
     }
 

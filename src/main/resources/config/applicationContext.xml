@@ -24,17 +24,21 @@
         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
        default-lazy-init="true">
 
-    <!--<context:annotation-config/>-->
+    <context:annotation-config/>
     <!--setting the connection pool-->
     <!--dao layer database properties-->
     <!--configuration file -->
     <context:property-placeholder location="classpath:/config/hibernate.properties"/>
+
+    <!--security rsa properties-->
+    <context:property-placeholder location="classpath:/config/rsa.properties"/>
 
     <!--setting the business layer scan-->
     <context:component-scan base-package="com.itlize.Korera" use-default-filters="true">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <!--<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>-->
     </context:component-scan>
+
 
     <!-- Database connection pool -->
     <!-- Spring enable Hibernate step 1: setting the jdbc connect pool -->
@@ -64,7 +68,7 @@
         <property name="idleConnectionTestPeriod" value="60" />
     </bean>
 
-    <!-- Spring manages Hibernate step 2: configure the sessionFactory -->
+    <!-- Spring manages Hibernate step 1: configure the sessionFactory -->
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource2"></property>
@@ -85,7 +89,7 @@
         </property>
     </bean>
 
-    <!-- Database transaction step 1: configure the database manager -->
+    <!-- Database transaction step 2: configure the database manager -->
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <!--<property name="sessionFactory" ref="sessionFactory"></property>-->

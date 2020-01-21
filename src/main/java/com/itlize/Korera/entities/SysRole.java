@@ -1,7 +1,9 @@
 package com.itlize.Korera.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
@@ -18,7 +20,7 @@ import java.util.Set;
 @Table(schema = "KoreraDB", name="sys_role")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "sysRole_id")
-public class SysRole implements Serializable {
+public class SysRole implements Serializable, GrantedAuthority {
 
     @Id
     @Column(name = "ID")
@@ -32,10 +34,14 @@ public class SysRole implements Serializable {
     @Column(name = "ROLE_DESC")
     private String ROLE_DESC;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
     public SysRole() {
+    }
+
+    public SysRole(String ROLE_NAME) {
+        this.ROLE_NAME = ROLE_NAME;
     }
 
     public SysRole(String ROLE_NAME, String ROLE_DESC) {
@@ -102,5 +108,11 @@ public class SysRole implements Serializable {
                 ", ROLE_NAME='" + ROLE_NAME + '\'' +
                 ", ROLE_DESC='" + ROLE_DESC + '\'' +
                 '}';
+    }
+
+    @JsonIgnore
+    @Override
+    public String getAuthority() {
+        return ROLE_NAME;
     }
 }

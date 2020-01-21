@@ -2,22 +2,23 @@ package com.itlize.Korera.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(schema = "KoreraDB", name="user")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "user_id")
-public class User implements Serializable {
+//@JsonIgnoreProperties(ignoreUnknown = true)
+public class User implements Serializable, UserDetails {
 
     @Id
     @Column(name = "user_id")
@@ -81,10 +82,6 @@ public class User implements Serializable {
         this.user_name = user_name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -105,6 +102,14 @@ public class User implements Serializable {
         this.join_date = join_date;
     }
 
+    public Set<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<SysRole> roles) {
+        this.roles = roles;
+    }
+
     public Set<Project> getProjects() {
         return projects;
     }
@@ -113,12 +118,44 @@ public class User implements Serializable {
         this.projects = projects;
     }
 
-    public Set<SysRole> getRoles() {
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
 
-    public void setRoles(Set<SysRole> roles) {
-        this.roles = roles;
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getUsername() {
+        return user_name;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 

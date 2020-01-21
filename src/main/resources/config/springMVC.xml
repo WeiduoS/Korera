@@ -24,6 +24,9 @@
     <!--<mvc:default-servlet-handler/>-->
     <!--filter the static resources-->
     <mvc:resources location="/resources/" mapping="/resources/**"/>
+    <mvc:resources location="/img/" mapping="/img/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/plugins/" mapping="/plugins/**"/>
     <!--open Spring MVC annotation-->
     <mvc:annotation-driven/>
 

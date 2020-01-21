@@ -25,6 +25,7 @@
     <slf4j.version>1.7.21</slf4j.version>
     <JUnit.version>4.12</JUnit.version>
     <jackon.version>2.10.1</jackon.version>
+    <jsonwebtoken.version>0.10.7</jsonwebtoken.version>
   </properties>
 
   <dependencies>
@@ -251,6 +252,43 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
       <version>${jackon.version}</version>
+    </dependency>
+
+    <!--JJWT :: API-->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>${jsonwebtoken.version}</version>
+    </dependency>
+
+    <!--JJWT :: Impl-->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${jsonwebtoken.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!--JJWT :: Extensions :: Jackson-->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${jsonwebtoken.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.10.5</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.10</version>
+      <scope>provided</scope>
     </dependency>
 
   </dependencies>
