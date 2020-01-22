@@ -52,7 +52,14 @@ public class UserServicesImpl implements UserServices {
     @Override
     public int saveOrUpdateUser(User user) {
         if(user == null) return -1;
-        int res = ud.saveOrUpdateUser(user);
+        User u = ud.getUserByName(user.getUser_name());
+        int res = -1;
+        if(u != null) return -2;
+        else{
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            res = ud.saveOrUpdateUser(user);
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return res;
     }
 

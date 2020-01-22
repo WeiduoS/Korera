@@ -17,7 +17,6 @@ import java.util.*;
 @Table(schema = "KoreraDB", name="user")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "user_id")
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements Serializable, UserDetails {
 
     @Id

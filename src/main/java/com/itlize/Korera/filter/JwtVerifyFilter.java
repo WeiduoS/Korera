@@ -37,7 +37,6 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
-            //如果携带错误的token，则给用户提示请登录！
             chain.doFilter(request, response);
             response.setContentType("application/json;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -49,15 +48,14 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
             out.flush();
             out.close();
         } else {
-            //如果携带了正确格式的token要先得到token
             String token = header.replace("Bearer ", "");
-            //验证tken是否正确
             Payload<User> payload = JwtUtils.getInfoFromToken(token, rsaManager.getPublicKey(), User.class);
             User user = payload.getUserInfo();
 
             if(user != null){
                 UsernamePasswordAuthenticationToken authResult = new UsernamePasswordAuthenticationToken(user.getUser_name(), null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authResult);
+                request.setAttribute("user_id", user.getUser_id());
                 chain.doFilter(request, response);
             }
         }
