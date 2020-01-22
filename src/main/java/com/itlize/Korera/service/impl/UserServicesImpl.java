@@ -1,8 +1,10 @@
 package com.itlize.Korera.service.impl;
 
+import com.itlize.Korera.dao.SysRoleDao;
 import com.itlize.Korera.dao.UserDao;
 import com.itlize.Korera.entities.SysRole;
 import com.itlize.Korera.entities.User;
+import com.itlize.Korera.service.SysRoleServices;
 import com.itlize.Korera.service.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +29,10 @@ public class UserServicesImpl implements UserServices {
     private UserDao ud;
 
     @Autowired
+    @Qualifier("SysRoleSerivcesImpl")
+    SysRoleServices sysRoleServices;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -36,7 +42,9 @@ public class UserServicesImpl implements UserServices {
         int res = -1;
         if(u != null) return -2;
         else{
+            List<SysRole> roles = sysRoleServices.getSysRoleByName("ROLE_USER");
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.getRoles().addAll(roles);
             res = ud.addUser(user);
         }
         return res;
@@ -56,7 +64,9 @@ public class UserServicesImpl implements UserServices {
         int res = -1;
         if(u != null) return -2;
         else{
+            List<SysRole> roles = sysRoleServices.getSysRoleByName("ROLE_USER");
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.getRoles().addAll(roles);
             res = ud.saveOrUpdateUser(user);
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

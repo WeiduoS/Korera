@@ -106,10 +106,11 @@ public class CategoryController {
     public void preCategoryRequest(@PathVariable(value = "category_id", required = false) Integer category_id, Model model) {
         if(category_id != null) {
             Category category = categoryServices.getCategoryById(category_id);
-            System.out.println("model attribute: " + category);
-            model.addAttribute("category", category);
+            if(category == null) model.addAttribute("category", new Category());
+            else model.addAttribute("category", category);
         }
     }
+
 //
 //    @RequestMapping(value = "/delete/{project_id}", method = RequestMethod.DELETE)
 //    public String deleteProject(@PathVariable("project_id")Integer project_id){
@@ -117,5 +118,7 @@ public class CategoryController {
 //        projectServices.removeProject(new Project(project_id, "", new User()));
 //        return "redirect:/project/findAll";
 //    }
+
+
 
 }

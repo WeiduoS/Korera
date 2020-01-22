@@ -169,28 +169,28 @@
       <version>1.2</version>
     </dependency>
 
-    <!--&lt;!&ndash;spring-security-core&ndash;&gt;-->
+    <!--&lt;!&ndash;spring-security.xml-core&ndash;&gt;-->
     <!--<dependency>-->
       <!--<groupId>org.springframework.security</groupId>-->
-      <!--<artifactId>spring-security-core</artifactId>-->
+      <!--<artifactId>spring-security.xml-core</artifactId>-->
       <!--<version>${spring.security}</version>-->
     <!--</dependency>-->
 
-    <!--&lt;!&ndash;spring-security-web&ndash;&gt;-->
+    <!--&lt;!&ndash;spring-security.xml-web&ndash;&gt;-->
     <!--<dependency>-->
       <!--<groupId>org.springframework.security</groupId>-->
-      <!--<artifactId>spring-security-web</artifactId>-->
+      <!--<artifactId>spring-security.xml-web</artifactId>-->
       <!--<version>${spring.security}</version>-->
     <!--</dependency>-->
 
-    <!--spring-security-config-->
+    <!--spring-security.xml-config-->
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
       <version>${spring.security}</version>
     </dependency>
 
-    <!--spring-security-taglibs-->
+    <!--spring-security.xml-taglibs-->
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-taglibs</artifactId>

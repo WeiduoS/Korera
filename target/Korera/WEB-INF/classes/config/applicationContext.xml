@@ -100,6 +100,6 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!--enable Spring Security-->
-    <import resource="spring-security"/>
+    <import resource="spring-security.xml"/>
 
 </beans>

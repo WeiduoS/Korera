@@ -162,7 +162,6 @@ public class ProjectController {
 
     @RequestMapping(value = "/delete/{project_id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteProject(@PathVariable("project_id")Integer project_id, @ModelAttribute("project") Project project){
-//        projectServices.removeProject(new Project(project_id, "", new User()));
 
         System.out.println("delete project:" + project);
 
