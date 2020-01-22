@@ -26,7 +26,6 @@ import java.util.*;
  */
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
-    private AuthenticationManager authenticationManager;
     private RsaManager rsaManager;
 
     public JwtLoginFilter(AuthenticationManager authenticationManager, RsaManager rsaManager) {

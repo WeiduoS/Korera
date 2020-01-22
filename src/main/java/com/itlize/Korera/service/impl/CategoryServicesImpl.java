@@ -27,20 +27,37 @@ public class CategoryServicesImpl implements CategoryServices {
     @Override
     public int addCategory(Category category) {
         if(category == null) return -1;
-        int res = cd.addCategory(category);
+        List<Category> list = cd.getCategoryByName(category.getCategory_name());
+        int res = -1;
+        if(!list.isEmpty()) res = -2;
+        else{
+            res = cd.addCategory(category);
+        }
         return res;
     }
 
     @Override
     public int updateCategory(Category category) {
         if(category == null) return -1;
-        return cd.updateCategory(category);
+        List<Category> list = cd.getCategoryByName(category.getCategory_name());
+        int res = -1;
+        if(!list.isEmpty()) res = -2;
+        else{
+            res = cd.updateCategory(category);
+        }
+        return res;
     }
 
     @Override
     public int saveOrUpdateCategory(Category category) {
         if(category == null) return -1;
-        return cd.saveOrUpdateCategory(category);
+        List<Category> list = cd.getCategoryByName(category.getCategory_name());
+        int res = -1;
+        if(!list.isEmpty()) res = -2;
+        else{
+            res = cd.saveOrUpdateCategory(category);
+        }
+        return res;
     }
 
     @Override

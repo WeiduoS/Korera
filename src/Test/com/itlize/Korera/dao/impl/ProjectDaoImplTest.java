@@ -1,33 +1,51 @@
-package com.itlize.Korera.dao;
+package com.itlize.Korera.dao.impl;
 
+import com.itlize.Korera.dao.ProjectDao;
 import com.itlize.Korera.entities.Category;
 import com.itlize.Korera.entities.Project;
 import com.itlize.Korera.entities.Resource;
 import com.itlize.Korera.entities.User;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * @author Weiduo
- * @date 2020/1/1 - 4:36 PM
+ * @date 2020/1/22 - 3:41 PM
  */
-public class ProjectDaoTest {
-    ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:/config/applicationContext.xml");
-    ProjectDao pd = (ProjectDao) ac.getBean("ProjectDaoImpl");
+@ContextConfiguration(locations = "classpath:config/applicationContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+public class ProjectDaoImplTest {
+
+    @Autowired
+    @Qualifier(value = "ProjectDaoImpl")
+    ProjectDao pd;
 
     @Test
-    public void addProjectTest() {
-        Project project = new Project("ptest02", new User(4));
-        project.getResouces().add(new Resource(5));
+    public void addProject() {
+        // test resource cascade
+//        Project project = new Project("ptest02", new User(4));
+//        project.getResouces().add(new Resource(42));
+//        System.out.println(pd.addProject(project));
+        // test user cascade
+        Project project = new Project("user cascade", new User(4));
+        project.setUser(new User(4));
         System.out.println(pd.addProject(project));
+
     }
 
     @Test
-    public void updateProjectTest() {
+    public void updateProject() {
         Project project = new Project(1, "ptest02", new User(1,"xiaoming", "1231"));
         project.getResouces().add(new Resource(1));
         int res = pd.updateProject(project);
@@ -35,7 +53,7 @@ public class ProjectDaoTest {
     }
 
     @Test
-    public void saveOrUpdateProjectTest() {
+    public void saveOrUpdateProject() {
 //        for(int i = 1; i <= 5; i++) {
 //            Project p = new Project(i, "tests", new User(1,"xiaoming", "1231"));
 //            System.out.println(pd.saveOrUpdateProject(p));
@@ -50,19 +68,13 @@ public class ProjectDaoTest {
     }
 
     @Test
-    public void listProjectsTest() {
+    public void listProjects() {
         List<Project> list = pd.listProjects();
         System.out.println(list.toString());
     }
 
     @Test
-    public void getProjectByIdTest() {
-        Project project = pd.getProjectById(1);
-        System.out.println(project.toString());
-    }
-
-    @Test
-    public void getProjectTest() {
+    public void getProjectById() {
         Project project = pd.getProjectById(22);
         System.out.println(project.toString());
     }
@@ -74,22 +86,21 @@ public class ProjectDaoTest {
     }
 
     @Test
-    public void removeProjectTest() {
-        int res = pd.removeProject(pd.getProjectById(26));
+    public void removeProject() {
+        int res = pd.removeProject(pd.getProjectById(41));
         System.out.println("res: " + res);
     }
 
     @Test
-    public void getProjectSizeTest(){
+    public void getProjectSize() {
         BigInteger res = pd.getProjectSize();
         System.out.println(res);
     }
 
     @Test
-    public void paginationProjectTest() {
+    public void paginationProject() {
         int pageIndex = 1, pageSize = 1;
         List<Project> list = pd.paginationProject(pageIndex, pageSize);
         System.out.println(list);
     }
-
 }

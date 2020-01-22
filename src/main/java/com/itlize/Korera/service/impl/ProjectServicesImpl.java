@@ -67,7 +67,7 @@ public class ProjectServicesImpl implements ProjectServices {
         for(Resource res : project.getResouces()) {
             List<ProjectResource> prs = prd.getMappingById(
                     project.getProject_id(),
-                    res.getResourceId());
+                    res.getResource_id());
             for(ProjectResource pr : prs) {
                 res.setCols(pr.getCols());
             }

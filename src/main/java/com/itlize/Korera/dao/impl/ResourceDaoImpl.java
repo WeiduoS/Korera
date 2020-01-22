@@ -73,7 +73,7 @@ public class ResourceDaoImpl implements ResourceDao{
         List<Resource> list = null;
         try {
             session.beginTransaction();
-            String sql = "select * from Resource";
+            String sql = "select * from resource";
             Query query = session.createSQLQuery(sql);
             list = ((NativeQuery) query).addEntity(Resource.class).list();
             session.getTransaction().commit();

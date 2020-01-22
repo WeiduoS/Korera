@@ -17,7 +17,7 @@ public class ResourceController {
     @Autowired
     private ResourceServices resourceService;
 
-    @RequestMapping(value = {"/findall"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/findAll"},method = RequestMethod.GET)
     @ResponseBody
     public List<Resource> findAll(Model model){
         if(resourceService == null) return new ArrayList<>();
@@ -25,15 +25,8 @@ public class ResourceController {
         return resources;
     }
 
-    @RequestMapping(value = "/viewlist",method = RequestMethod.GET)
-    public String listResources(Model model){
-        if (resourceService == null) return "";
-        List<Resource> resources = resourceService.listResources();
-        model.addAttribute("resources",resources);
-        return "resources/resources";
-    }
 
-    @RequestMapping(value = "/findByID/{resourceId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/findById/{resourceId}",method = RequestMethod.GET)
     @ResponseBody
     public  Resource findByID(@PathVariable("resourceId") Integer id){
         if (resourceService == null) return null;
@@ -99,7 +92,7 @@ public class ResourceController {
     @RequestMapping(value = "/update/{resource_id}", method = RequestMethod.PUT)
     @ResponseBody
     public Resource updateResource(@PathVariable("resource_id") Integer id, @ModelAttribute("r_edit") Resource resource){
-        resource.setResourceId(id);
+        resource.setResource_id(id);
         resourceService.updateResource(resource);
         resource = resourceService.getResourceById(id);
         return resource;

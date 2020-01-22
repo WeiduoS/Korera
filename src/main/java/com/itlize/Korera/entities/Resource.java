@@ -14,19 +14,19 @@ import java.util.Set;
 @Entity
 @Table(schema = "KoreraDB", name="resource")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "resourceId")
+        property = "resource_id")
 public class Resource implements Serializable{
 
     @Id
     @Column(name = "resource_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer resourceId;
+    private Integer resource_id;
 
     @Column(name = "resource_code")
-    private String resourceCode;
+    private String resource_code;
 
     @Column(name = "resource_name")
-    private String resourceName;
+    private String resource_name;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", insertable = true, updatable = false, nullable = true)
@@ -43,45 +43,49 @@ public class Resource implements Serializable{
 
     }
 
-    public Resource(Integer resourceId) {
-        this.resourceId = resourceId;
+    public Resource(Integer resource_id) {
+        this.resource_id = resource_id;
     }
 
-    public Resource(String resourceCode, String resourceName, Category category) {
-        this.resourceCode = resourceCode;
-        this.resourceName = resourceName;
+    public Resource(String resource_code, String resource_name, Category category) {
+        this.resource_code = resource_code;
+        this.resource_name = resource_name;
         this.category = category;
     }
 
-    public Resource(Integer resourceId, String resourceCode, String resourceName, Category category) {
-        this.resourceId = resourceId;
-        this.resourceCode = resourceCode;
-        this.resourceName = resourceName;
+    public Resource(Integer resourceId, String resource_code, String resource_name, Category category) {
+        this.resource_id = resource_id;
+        this.resource_code = resource_code;
+        this.resource_name = resource_name;
         this.category = category;
     }
 
-    public Integer getResourceId() {
-        return resourceId;
+    public Integer getResource_id() {
+        return resource_id;
     }
 
-    public void setResourceId(Integer resourceId) {
-        this.resourceId = resourceId;
+    public void setResource_id(Integer resource_id) {
+        this.resource_id = resource_id;
     }
 
-    public String getResourceCode() {
-        return resourceCode;
+    public String getResource_code() {
+        return resource_code;
     }
 
-    public void setResourceCode(String resourceCode) {
-        this.resourceCode = resourceCode;
+    public void setResource_code(String resource_code) {
+        this.resource_code = resource_code;
     }
 
-    public String getResourceName() {
-        return resourceName;
+    public String getResource_name() {
+        return resource_name;
     }
 
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
+    public void setResource_name(String resource_name) {
+        this.resource_name = resource_name;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Category getCategory() {
@@ -112,10 +116,9 @@ public class Resource implements Serializable{
     @Override
     public String toString() {
         return "Resource{" +
-                "resourceId=" + resourceId +
-                ", resourceCode='" + resourceCode + '\'' +
-                ", resourceName='" + resourceName + '\'' +
+                "resource_id=" + resource_id +
+                ", resource_code='" + resource_code + '\'' +
+                ", resource_name='" + resource_name + '\'' +
                 '}';
     }
-
 }

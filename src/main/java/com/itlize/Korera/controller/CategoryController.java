@@ -27,7 +27,6 @@ import java.util.List;
  * @author Weiduo
  * @date 2019/12/30 - 4:02 PM
  */
-//@SessionAttributes(value = "msg", types = {String.class})
 @Controller
 @RequestMapping("/category")
 public class CategoryController {
@@ -94,14 +93,37 @@ public class CategoryController {
         return responseEntity;
     }
 
-//
-//    @RequestMapping(value = "/update/{project_id}", method = RequestMethod.PUT)
-//    public String updateProject(@PathVariable("project_id")String project_id, @ModelAttribute("project") Project project){
-//        System.out.println("update a project: " + project.toString());
-//        projectServices.saveOrUpdateProject(project);
-//        return "redirect:/project/findAll";
-//    }
-//
+
+    @RequestMapping(value = "/update/{category_id}", method = RequestMethod.PUT)
+    public ResponseEntity updateCategory(@ModelAttribute("category") Category category, RequestEntity<Category> requestEntity){
+        category = updateCategoryMapping(category, requestEntity.getBody());
+
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.put("Cache-Control", Arrays.asList("max-age=3600"));
+        headers.put("Content-Type", Arrays.asList("text/plain;charset=UTF-8"));
+        String body = "";
+
+        int res = categoryServices.saveOrUpdateCategory(category);
+
+        if(res > 0) {
+            status = HttpStatus.OK;
+            body = "update successfully";
+        }
+        else if(res == -1){
+            status = HttpStatus.NOT_ACCEPTABLE;
+            body = "the category information is not acceptable";
+        }else if(res == -2) {
+            status = HttpStatus.NOT_ACCEPTABLE;
+            body = "the category name is already exist";
+        }
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
+                headers,
+                status);
+        return responseEntity;
+    }
+
     @ModelAttribute(value = "/*/{category_id}")
     public void preCategoryRequest(@PathVariable(value = "category_id", required = false) Integer category_id, Model model) {
         if(category_id != null) {
@@ -111,13 +133,37 @@ public class CategoryController {
         }
     }
 
-//
-//    @RequestMapping(value = "/delete/{project_id}", method = RequestMethod.DELETE)
-//    public String deleteProject(@PathVariable("project_id")Integer project_id){
-//        System.out.println("delete a project: " + project_id);
-//        projectServices.removeProject(new Project(project_id, "", new User()));
-//        return "redirect:/project/findAll";
-//    }
+    private Category updateCategoryMapping(Category db_category, Category web_category) {
+        if(web_category.getCategory_name() != null && !web_category.getCategory_name().equals("")) db_category.setCategory_name(web_category.getCategory_name());
+        if(!web_category.getResources().isEmpty()) db_category.getResources().addAll(web_category.getResources());
+        return db_category;
+    }
+
+
+    @RequestMapping(value = "/delete/{category_id}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteCategory(@ModelAttribute("category") Category category){
+        HttpStatus status = HttpStatus.OK;
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.put("Cache-Control", Arrays.asList("max-age=3600"));
+        headers.put("Content-Type", Arrays.asList("text/plain;charset=UTF-8"));
+        String body = "";
+        int res = categoryServices.removeCategories(category);
+
+        if(res > 0) {
+            status = HttpStatus.OK;
+            body = "remove successfully";
+        }
+        else {
+            status = HttpStatus.BAD_REQUEST;
+            body = "bad request";
+        }
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
+                headers,
+                status);
+
+        return responseEntity;
+    }
 
 
 

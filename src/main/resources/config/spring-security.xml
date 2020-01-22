@@ -24,6 +24,7 @@
         <intercept-url pattern="/user/add" access="permitAll()"/>
         <intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')"/>
         <csrf disabled="true"/>
+        <cors configuration-source-ref="corsSource"/>
         <!--<form-login login-page="/login.jsp"-->
                     <!--login-processing-url="/login"-->
                     <!--default-target-url="/index.jsp"-->
@@ -60,6 +61,40 @@
             <password-encoder ref="passwordEncoder"/>
         </authentication-provider>
     </authentication-manager>
+
+    <b:bean id="corsSource" class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
+        <b:property name="corsConfigurations">
+            <b:map>
+                <b:entry key="/**">
+                    <b:bean class="org.springframework.web.cors.CorsConfiguration">
+                        <b:property name="allowCredentials" value="true" />
+                        <b:property name="allowedHeaders">
+                            <b:list>
+                                <b:value>Authorization</b:value>
+                                <b:value>Content-Type</b:value>
+                            </b:list>
+                        </b:property>
+                        <b:property name="allowedMethods">
+                            <b:list>
+                                <b:value>POST</b:value>
+                                <b:value>GET</b:value>
+                                <b:value>PUT</b:value>
+                                <b:value>DELETE</b:value>
+                            </b:list>
+                        </b:property>
+                        <b:property name="allowedOrigins" value="*" />
+                        <b:property name="exposedHeaders">
+                            <b:list>
+                                <b:value>Location</b:value>
+                                <b:value>Content-Disposition</b:value>
+                            </b:list>
+                        </b:property>
+                        <b:property name="maxAge" value="86400" />
+                    </b:bean>
+                </b:entry>
+            </b:map>
+        </b:property>
+    </b:bean>
 
 
     <!--<authentication-manager>-->

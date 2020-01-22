@@ -17,8 +17,8 @@ public class ResourceServiceTest {
     public void addResourceTest() {
         Resource resource = new Resource();
         for(int i = 0; i < 5; i++) {
-            resource.setResourceName("resource " + i);
-            resource.setResourceCode(String.valueOf(i * 10));
+            resource.setResource_name("resource " + i);
+            resource.setResource_code(String.valueOf(i * 10));
             resource.setCategory_id(new Category(1));
             int res = rs.addResource(resource);
             System.out.println(res);
@@ -28,8 +28,8 @@ public class ResourceServiceTest {
     @Test
     public void updateResourceTest() {
         Resource resource = new Resource();
-        resource.setResourceId(1);
-        resource.setResourceName("hello");
+        resource.setResource_id(1);
+        resource.setResource_name("hello");
         resource.setCategory_id(new Category(1));
         int res = rs.updateResource(resource);
         System.out.println(res);
@@ -38,8 +38,8 @@ public class ResourceServiceTest {
     @Test
     public void saveOrUpdateResourceTest() {
         Resource resource = new Resource();
-        resource.setResourceId(1);
-        resource.setResourceName("hello11");
+        resource.setResource_id(1);
+        resource.setResource_name("hello11");
         resource.setCategory_id(new Category(1));
         int res = rs.updateResource(resource);
         System.out.println(res);
@@ -65,7 +65,7 @@ public class ResourceServiceTest {
     @Test
     public void removeResourceTest() {
         Resource resource = new Resource();
-        resource.setResourceId(4);
+        resource.setResource_id(4);
         System.out.println(rs.removeResource(resource));
     }
 
