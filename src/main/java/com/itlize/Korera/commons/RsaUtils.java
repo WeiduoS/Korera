@@ -2,7 +2,9 @@ package com.itlize.Korera.commons;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -90,8 +92,8 @@ public class RsaUtils {
     }
 
     private static byte[] readFile(String fileName) throws Exception {
-        System.out.println("RsaUtils path: " + System.getProperty("user.dir"));
-        return Files.readAllBytes(new File(fileName).toPath());
+//        return Files.readAllBytes(new File(fileName).toPath());
+        return Files.readAllBytes(Paths.get(Thread.currentThread().getContextClassLoader().getResource(fileName).toURI()));
     }
 
     private static void writeFile(String destPath, byte[] bytes) throws IOException {

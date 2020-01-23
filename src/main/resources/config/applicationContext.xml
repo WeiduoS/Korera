@@ -47,6 +47,7 @@
         <property name="username" value="${jdbc.username}"></property>
         <property name="password" value="${jdbc.password}"></property>
         <property name="driverClassName" value="${jdbc.driverClassName}"></property>
+        <property name="schema" value="/Users/Stoic_Colony/Documents/GitHub/Korera/rebuild.sql"></property>
     </bean>
 
     <!-- another connection pool -->
@@ -67,6 +68,7 @@
         <!-- Idle check interval, check the idle connection in the connection pool every 120 seconds in seconds -->
         <property name="idleConnectionTestPeriod" value="60" />
     </bean>
+
 
     <!-- Spring manages Hibernate step 1: configure the sessionFactory -->
     <bean id="sessionFactory"

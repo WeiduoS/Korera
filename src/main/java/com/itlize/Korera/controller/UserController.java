@@ -73,6 +73,11 @@ public class UserController {
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
         headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
+//        headers.put("Access-Control-Allow-Origin", Arrays.asList("origin"));
+        headers.put("origin", Arrays.asList("localhost:8080"));
+        headers.put("Access-Control-Allow-Methods", Arrays.asList("POST", "GET", "OPTIONS"));
+        headers.put("Access-Control-Allow-Credentials", Arrays.asList("true"));
+        headers.put("Access-Control-Allow-Headers", Arrays.asList("content-type", "x-gwt-module-base", "x-gwt-permutation", "clientid", "longpush"));
 
         int res = userServices.addUser(user);
         String body = "";

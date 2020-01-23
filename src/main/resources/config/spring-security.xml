@@ -40,8 +40,8 @@
     </http>
 
     <b:bean id="rsaManager" class="com.itlize.Korera.commons.RsaManager">
-        <b:property name="privateKeyPath" value="/Users/Stoic_Colony/Documents/GitHub/Korera/src/main/resources/auth_key/id_key_rsa"></b:property>
-        <b:property name="publicKeyPath" value="/Users/Stoic_Colony/Documents/GitHub/Korera/src/main/resources/auth_key/id_key_rsa.pub"></b:property>
+        <b:property name="privateKeyPath" value="auth_key/id_key_rsa"></b:property>
+        <b:property name="publicKeyPath" value="auth_key/id_key_rsa.pub"></b:property>
     </b:bean>
 
     <b:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
