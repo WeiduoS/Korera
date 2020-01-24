@@ -30,7 +30,7 @@ public class RsaUtils {
     }
 
     /**
-     * 从文件中读取密钥
+     * reading private from file
      *
      * @param filename private key path，relative to classpath
      * @return private key
@@ -56,7 +56,7 @@ public class RsaUtils {
     }
 
     /**
-     * 获取密钥
+     * get private key
      *
      * @param bytes private key format
      * @return
@@ -92,7 +92,6 @@ public class RsaUtils {
     }
 
     private static byte[] readFile(String fileName) throws Exception {
-//        return Files.readAllBytes(new File(fileName).toPath());
         return Files.readAllBytes(Paths.get(Thread.currentThread().getContextClassLoader().getResource(fileName).toURI()));
     }
 

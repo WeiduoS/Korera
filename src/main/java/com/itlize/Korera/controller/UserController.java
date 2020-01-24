@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -28,7 +28,6 @@ public class UserController {
     private UserServices userServices;
 
     @RequestMapping(value = "/findAll", method = RequestMethod.GET)
-    @ResponseBody
     public List<User> findAll(){
         if(userServices == null) return new ArrayList<>();
 
@@ -38,7 +37,6 @@ public class UserController {
     }
 
     @RequestMapping(value = "/findById/{user_id}", method = RequestMethod.GET)
-    @ResponseBody
     public ResponseEntity findById(@PathVariable("user_id")Integer user_id){
         HttpStatus status = HttpStatus.NOT_FOUND;
         MultiValueMap<String, String> headers = new HttpHeaders();
@@ -61,9 +59,9 @@ public class UserController {
         return responseEntity;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = {"/add", "/sign-up"}, method = RequestMethod.POST)
     public ResponseEntity addUser(RequestEntity<User> requestEntity){
-
+        System.out.println("user controller");
         User user = requestEntity.getBody();
 
         long millis = System.currentTimeMillis();

@@ -1,9 +1,12 @@
 package com.itlize.Korera.service.impl;
 
+import com.itlize.Korera.dao.ProjectResourceDao;
 import com.itlize.Korera.dao.ResourceDao;
+import com.itlize.Korera.entities.ProjectResource;
 import com.itlize.Korera.entities.Resource;
 import com.itlize.Korera.service.ResourceServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -14,10 +17,14 @@ public class ResourceServicesImpl implements ResourceServices {
     @Autowired
     ResourceDao rd;
 
+    @Autowired
+    @Qualifier("ProjectResourceDaoImpl")
+    ProjectResourceDao prd;
+
     @Override
     public int addResource(Resource resource) {
         if(resource == null) return -1;
-        int res = rd.addResource(resource);
+        int res = rd.saveOrUpdateResource(resource);
         return res;
     }
 
@@ -31,7 +38,9 @@ public class ResourceServicesImpl implements ResourceServices {
     @Override
     public int saveOrUpdateResource(Resource resource) {
         if(resource == null) return -1;
+
         int res = rd.saveOrUpdateResource(resource);
+
         return res;
     }
 

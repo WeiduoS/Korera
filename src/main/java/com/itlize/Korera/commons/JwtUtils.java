@@ -38,7 +38,7 @@ public class JwtUtils {
     }
 
     /**
-     * 私钥加密token
+     * encrypt token
      *
      * @param userInfo   payload data
      * @param privateKey private key
@@ -55,7 +55,7 @@ public class JwtUtils {
     }
 
     /**
-     * 公钥解析token
+     * parsing token
      *
      * @param token     user request token
      * @param publicKey public key
@@ -70,7 +70,7 @@ public class JwtUtils {
     }
 
     /**
-     * 获取token中的用户信息
+     * get user info from token
      *
      * @param token     user request token
      * @param publicKey public key
@@ -78,22 +78,17 @@ public class JwtUtils {
      */
     public static <T> Payload<T> getInfoFromToken(String token, PublicKey publicKey, Class<T> userType) {
         Jws<Claims> claimsJws = parserToken(token, publicKey);
-        System.out.println("claimsJws:" + claimsJws.toString());
         Claims body = claimsJws.getBody();
-        System.out.println("body: " + body.toString());
         Payload<T> claims = new Payload<>();
         claims.setId(body.getId());
-        System.out.println("claims:" + claims.toString());
         claims.setUserInfo(JsonUtils.toBean(body.get(JWT_PAYLOAD_USER_KEY).toString(), userType));
 
-        System.out.println("claims:" + claims.toString());
         claims.setExpiration(body.getExpiration());
-        System.out.println("claims:" + claims.toString());
         return claims;
     }
 
     /**
-     * 获取token中的载荷信息
+     * get playload from token
      *
      * @param token     user request token
      * @param publicKey public key

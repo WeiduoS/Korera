@@ -36,7 +36,12 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer ")) {
+        String path = request.getServletPath();
+        System.out.println("jwt verify path: " + path);
+
+        if(path.equals("/user/add") || path.equals("/user/sign-up")){
+            chain.doFilter(request, response);
+        }else if (header == null || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             response.setContentType("application/json;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);

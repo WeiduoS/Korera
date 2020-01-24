@@ -18,12 +18,13 @@ import javax.sql.DataSource;
 public class DatabaseInitializer implements InitializingBean {
 
     @Autowired
-    @Qualifier(value = "dataSource2")
+    @Qualifier(value = "dataSource")
     DataSource dataSource;
 
     DatabaseInitializer() {
 
     }
+
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -34,7 +35,7 @@ public class DatabaseInitializer implements InitializingBean {
         ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
         databasePopulator.setContinueOnError(true);
         databasePopulator.addScript(new ClassPathResource("DBInit/build.sql"));
-        databasePopulator.addScript(new ClassPathResource("DBInit/initial.sql"));
+//        databasePopulator.addScript(new ClassPathResource("DBInit/initial.sql"));
         databasePopulator.execute(dataSource);
         return databasePopulator;
     }

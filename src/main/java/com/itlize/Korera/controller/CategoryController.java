@@ -27,7 +27,7 @@ import java.util.List;
  * @author Weiduo
  * @date 2019/12/30 - 4:02 PM
  */
-@Controller
+@RestController
 @RequestMapping("/category")
 public class CategoryController {
 
@@ -36,7 +36,6 @@ public class CategoryController {
     private CategoryServices categoryServices;
 
     @RequestMapping(value = "/findAll", method = RequestMethod.GET)
-    @ResponseBody
     public List<Category> findAll() {
         if(categoryServices == null) return new ArrayList<>();
         List<Category> categories = categoryServices.listCategories();
@@ -44,17 +43,14 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/findById/{category_id}", method = RequestMethod.GET)
-    @ResponseBody
     public Category findByID(@PathVariable("category_id")Integer category_id, Model model) {
         if(categoryServices == null || category_id == null) return new Category();
         return (Category) model.getAttribute("category");
     }
 
     @RequestMapping(value = "/findByName/{category_name}", method = RequestMethod.GET)
-    @ResponseBody
     public List<Category> findByName (@PathVariable("category_name")String category_name) {
         if(categoryServices == null) return new ArrayList<>();
-        System.out.println("category find by name: " + category_name);
         List<Category> categories = categoryServices.getCategoryByName(category_name);
         return categories;
     }
@@ -67,7 +63,7 @@ public class CategoryController {
         HttpStatus status = null;
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
-        headers.put("Content-Type", Arrays.asList("text/plain;charset=UTF-8"));
+        headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
         String body = "";
         int res = -1;
 
@@ -101,7 +97,7 @@ public class CategoryController {
         HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
-        headers.put("Content-Type", Arrays.asList("text/plain;charset=UTF-8"));
+        headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
         String body = "";
 
         int res = categoryServices.saveOrUpdateCategory(category);
@@ -145,7 +141,7 @@ public class CategoryController {
         HttpStatus status = HttpStatus.OK;
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
-        headers.put("Content-Type", Arrays.asList("text/plain;charset=UTF-8"));
+        headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
         String body = "";
         int res = categoryServices.removeCategories(category);
 

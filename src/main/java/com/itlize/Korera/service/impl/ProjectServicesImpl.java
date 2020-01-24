@@ -40,17 +40,31 @@ public class ProjectServicesImpl implements ProjectServices {
         return res;
     }
 
+
     @Override
     public int updateProject(Project project) {
         if(project == null) return -1;
-        int res = pd.updateProject(project);
+        int res = saveOrUpdateProject(project);
         return res;
     }
 
     @Override
     public int saveOrUpdateProject(Project project) {
         if(project == null) return -1;
-        int res = pd.saveOrUpdateProject(project);
+        int res = 0;
+        if(project.getProject_id() != null) {
+            for(Resource resource : project.getResouces()) {
+                List<ProjectResource> prs = prd.getMappingById(
+                        project.getProject_id(),
+                        resource.getResource_id());
+                for(ProjectResource pr : prs) {
+                    pr.getCols().addAll(resource.getCols());
+                    res = prd.saveOrUpdateMapping(pr);
+                    if(res < 0) return -1;
+                }
+            }
+        }
+        res = pd.saveOrUpdateProject(project);
         return res;
     }
 

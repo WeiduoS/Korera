@@ -9,7 +9,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>Korera Maven Webapp</name>
+  <name>Korera</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -30,11 +30,11 @@
 
   <dependencies>
     <!--Spring Core-->
-    <!--<dependency>-->
-    <!--<groupId>org.springframework</groupId>-->
-    <!--<artifactId>spring-core</artifactId>-->
-    <!--<version>${spring.version}</version>-->
-    <!--</dependency>-->
+    <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-core</artifactId>
+    <version>${spring.version}</version>
+    </dependency>
 
     <!--Spring Context-->
     <dependency>
@@ -119,17 +119,10 @@
 
     <!--Integration for c3p0 Connection pooling into Hibernate ORM-->
     <dependency>
-    <groupId>org.hibernate</groupId>
-    <artifactId>hibernate-c3p0</artifactId>
-    <version>${hibernate.version}</version>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-c3p0</artifactId>
+        <version>${hibernate.version}</version>
     </dependency>
-
-    <!--&lt;!&ndash;Integration for Proxool Connection pooling into Hibernate O/RM&ndash;&gt;-->
-    <!--<dependency>-->
-    <!--<groupId>org.hibernate</groupId>-->
-    <!--<artifactId>hibernate-proxool</artifactId>-->
-    <!--<version>${hibernate.version}</version>-->
-    <!--</dependency>-->
 
 
     <!--&lt;!&ndash;Integration for using Ehcache 2.x as a Hibernate second-level-cache provider&ndash;&gt;-->
@@ -146,13 +139,21 @@
     <!--<version>9.4.16.Final</version>-->
     <!--</dependency>-->
 
-    <!--Servlet-->
+      <!--Servlet-->
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>4.0.0</version>
+        <scope>provided</scope>
     </dependency>
+
+    <!--Servlet-->
+    <!--<dependency>-->
+      <!--<groupId>javax.servlet</groupId>-->
+      <!--<artifactId>servlet-api</artifactId>-->
+      <!--<version>2.5</version>-->
+      <!--<scope>provided</scope>-->
+    <!--</dependency>-->
 
     <!--JSP-->
     <dependency>
@@ -325,6 +326,14 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.2.3</version>
+          <configuration>
+            <failOnMissingWebXml>false</failOnMissingWebXml>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>

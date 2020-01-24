@@ -24,7 +24,6 @@ import static org.junit.Assert.*;
  * @author Weiduo
  * @date 2020/1/22 - 3:30 PM
  */
-@ContextConfiguration(locations = "classpath:config/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class ResourceDaoImplTest {
