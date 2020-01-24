@@ -30,6 +30,33 @@ public class ResourceController {
         return resources;
     }
 
+    @RequestMapping(value = "/pagination/{page}",method = RequestMethod.GET)
+    public ResponseEntity<List<Resource>> pagination(@PathVariable("page") String page){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.put("Cache-Control", Arrays.asList("max-age=3600"));
+        headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
+
+        if(resourceService == null) return new ResponseEntity<>(new ArrayList<>(), headers, status);
+
+        String[] strs = page.split("-");
+        List<Resource> resources = new ArrayList<>();
+
+        try{
+            Integer start = Integer.valueOf(strs[0]);
+            Integer size = Integer.valueOf(strs[1]);
+            status = HttpStatus.OK;
+            resources = resourceService.paginationResource(start, size);
+        }catch (Exception e) {
+            status = HttpStatus.BAD_REQUEST;
+
+        }
+
+        ResponseEntity<List<Resource>> responseEntity = new ResponseEntity<>(resources,
+                headers,
+                status);
+        return responseEntity;
+    }
 
     @RequestMapping(value = "/findById/{resource_id}",method = RequestMethod.GET)
     public Resource findByID(@PathVariable("resource_id") Integer id){

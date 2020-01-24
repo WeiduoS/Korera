@@ -5,6 +5,7 @@ import com.itlize.Korera.commons.JwtUtils;
 import com.itlize.Korera.commons.RsaManager;
 import com.itlize.Korera.entities.SysRole;
 import com.itlize.Korera.entities.User;
+import org.joda.time.DateTime;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -85,6 +86,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             Map resultMap = new HashMap();
             resultMap.put("code", HttpServletResponse.SC_OK);
             resultMap.put("msg", "authentication pass！");
+            resultMap.put("user", user);
+            resultMap.put("expired", DateTime.now().plusMinutes(24 * 60).toDateTime().toString("yyyy/MM/dd HH:mm:ss", Locale.US));
             out.write(new ObjectMapper().writeValueAsString(resultMap));
             out.flush();
             out.close();

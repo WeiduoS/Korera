@@ -34,8 +34,8 @@ public class DatabaseInitializer implements InitializingBean {
     private DatabasePopulator createDatabasePopulator() {
         ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
         databasePopulator.setContinueOnError(true);
-        databasePopulator.addScript(new ClassPathResource("DBInit/build.sql"));
-//        databasePopulator.addScript(new ClassPathResource("DBInit/initial.sql"));
+//        databasePopulator.addScript(new ClassPathResource("DBInit/build.sql"));
+        databasePopulator.addScript(new ClassPathResource("DBInit/initial.sql"));
         databasePopulator.execute(dataSource);
         return databasePopulator;
     }
