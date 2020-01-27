@@ -1,14 +1,14 @@
 package com.itlize.Korera.commons;
 
+import com.itlize.Korera.entities.JWTRemeberToken;
 import com.itlize.Korera.entities.Payload;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.itlize.Korera.entities.User;
+import io.jsonwebtoken.*;
 import org.joda.time.DateTime;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -28,13 +28,25 @@ public class JwtUtils {
      * @param expire     expire time, minutes
      * @return JWT
      */
-    public static String generateTokenExpireInMinutes(Object userInfo, PrivateKey privateKey, int expire) {
-        return Jwts.builder()
+    public static JWTRemeberToken generateTokenExpireInMinutes(Object userInfo, PrivateKey privateKey, int expire) {
+
+        String id = createJTI();
+
+        String username = ((User)userInfo).getUsername();
+
+        DateTime dateTime = DateTime.now();
+
+        String tokenValue = Jwts.builder()
                 .claim(JWT_PAYLOAD_USER_KEY, JsonUtils.toString(userInfo))
-                .setId(createJTI())
-                .setExpiration(DateTime.now().plusMinutes(expire).toDate())
+                .setId(id)
+                .setExpiration(dateTime.plusMinutes(expire).toDate())
                 .signWith(privateKey, SignatureAlgorithm.RS256)
                 .compact();
+
+        JWTRemeberToken token = new JWTRemeberToken(username, id, tokenValue,
+                new Timestamp(dateTime.toDateTime().getMillis()));
+
+        return token;
     }
 
     /**

@@ -3,11 +3,11 @@ package com.itlize.Korera.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itlize.Korera.commons.JwtUtils;
 import com.itlize.Korera.commons.RsaManager;
+import com.itlize.Korera.entities.JWTRemeberToken;
 import com.itlize.Korera.entities.SysRole;
 import com.itlize.Korera.entities.User;
 import org.joda.time.DateTime;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -39,6 +39,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
             User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
+            System.out.println("before:" + user.toString());
+            if(user.getRemember_me() != null) {
+                request.setAttribute("remember-me", user.getRemember_me());
+            }
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                     user.getUser_name(), user.getPassword());
 
@@ -62,23 +66,31 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     }
 
+
     @Override
     public void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+//        if(logger.isDebugEnabled()) {
+//            logger.debug("Authentication success. Updating SecurityContextHolder to contain: "
+//                    + authResult);
+//        }
+//
+//        SecurityContextHolder.getContext().setAuthentication(authResult);
+
+        getRememberMeServices().loginSuccess(request, response, authResult);
+
         User user = new User();
         user.setUser_name(authResult.getName());
-        System.out.println("setting name:" + user.toString());
         Set<SysRole> roles = new HashSet<>();
         for(Object role : authResult.getAuthorities().toArray()) {
             roles.add(new SysRole(role.toString()));
         }
         user.setRoles(roles);
-        System.out.println("roles: " + authResult.getAuthorities().toString());
-        System.out.println("setting roles: " + user.toString());
 
-        String token = JwtUtils.generateTokenExpireInMinutes(user, rsaManager.getPrivateKey(), 24 * 60);
+        if(request.getAttribute("remember-me") != null) user.setRemember_me(String.valueOf(request.getAttribute("remember-me")));
 
-        System.out.println("token: " + token);
-        response.addHeader("Authorization", "Bearer " + token);
+        JWTRemeberToken token = JwtUtils.generateTokenExpireInMinutes(user, rsaManager.getPrivateKey(), 24 * 60);
+
+        response.addHeader("Authorization", "Bearer " + token.getToken());
         try {
             response.setContentType("application/json;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
@@ -87,7 +99,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             resultMap.put("code", HttpServletResponse.SC_OK);
             resultMap.put("msg", "authentication pass！");
             resultMap.put("user", user);
-            resultMap.put("expired", DateTime.now().plusMinutes(24 * 60).toDateTime().toString("yyyy/MM/dd HH:mm:ss", Locale.US));
+            resultMap.put("expire-time", DateTime.now().plusMinutes(24 * 60).toDateTime().toString("yyyy/MM/dd HH:mm:ss", Locale.US));
+            resultMap.put("Authorization", "Bearer " + token.getToken());
             out.write(new ObjectMapper().writeValueAsString(resultMap));
             out.flush();
             out.close();

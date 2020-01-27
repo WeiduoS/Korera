@@ -1,9 +1,12 @@
 package com.itlize.Korera.config;
 
 import com.itlize.Korera.commons.RsaManager;
+import com.itlize.Korera.dao.impl.JWTDaoImpl;
 import com.itlize.Korera.filter.JwtLoginFilter;
 import com.itlize.Korera.filter.JwtVerifyFilter;
 import com.itlize.Korera.service.UserServices;
+import com.itlize.Korera.service.impl.JWTRememberSerivcesImpl;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +15,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -49,38 +54,36 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier(value = "dataSource")
     DataSource dataSource;
 
+    @Autowired
+    @Qualifier(value = "sessionFactory")
+    SessionFactory sessionFactory;
+
     @Bean(value = "passwordEncoder")
     public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder;
     }
 
-    @Bean
+    @Bean(value = "jwtDao")
     public PersistentTokenRepository tokenRepository() {
-        JdbcTokenRepositoryImpl jdbcTokenRepositoryImpl=new JdbcTokenRepositoryImpl();
-        jdbcTokenRepositoryImpl.setDataSource(dataSource);
-        return jdbcTokenRepositoryImpl;
+        JWTDaoImpl jwtDao = new JWTDaoImpl();
+        jwtDao.setSessionFactory(sessionFactory);
+        return jwtDao;
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.applyPermitDefaultValues();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    @Bean(value = "jwtRememberSerivces")
+    public AbstractRememberMeServices rememberMeServices() {
+        JWTRememberSerivcesImpl jwtRememberSerivces = new JWTRememberSerivcesImpl("fake key", userServices);
+        jwtRememberSerivces.setRepository(tokenRepository());
+        jwtRememberSerivces.setRsaManager(rsaManager);
+        return  jwtRememberSerivces;
     }
 
     @Bean("JwtLoginFilter")
     public JwtLoginFilter jwtLoginFilter() {
         try {
             JwtLoginFilter jwtLoginFilter = new JwtLoginFilter(super.authenticationManager(), rsaManager);
+            jwtLoginFilter.setRememberMeServices(rememberMeServices());
             return jwtLoginFilter;
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,6 +102,22 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return null;
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.applyPermitDefaultValues();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -112,19 +131,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**")
                 .hasAnyRole("USER")
                 .anyRequest()
-                .authenticated()
-            .and().formLogin()
+                .authenticated().and()
+            .formLogin()
                 .loginProcessingUrl("/login")
-                .failureForwardUrl("/login")
-            .and().cors()
-                .configurationSource(corsConfigurationSource())
-            .and().rememberMe()
-                .tokenValiditySeconds(60)
-                .rememberMeParameter("remember-me")
-                .tokenRepository(tokenRepository())
-            .and().addFilter(jwtLoginFilter())
+                .failureForwardUrl("/login").and()
+            .cors()
+                .configurationSource(corsConfigurationSource()).and()
+            .addFilter(jwtLoginFilter())
                 .addFilter(jwtVerifyFilter());
 
     }
+
+
 
 }

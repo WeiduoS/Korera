@@ -36,6 +36,9 @@ public class User implements Serializable, UserDetails {
     @Column(name = "join_date")
     private Date join_date;
 
+    @Transient
+    private String remember_me;
+
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "sys_user_role",
@@ -99,6 +102,14 @@ public class User implements Serializable, UserDetails {
 
     public void setJoin_date(Date join_date) {
         this.join_date = join_date;
+    }
+
+    public String getRemember_me() {
+        return remember_me;
+    }
+
+    public void setRemember_me(String remember_me) {
+        this.remember_me = remember_me;
     }
 
     public Set<SysRole> getRoles() {

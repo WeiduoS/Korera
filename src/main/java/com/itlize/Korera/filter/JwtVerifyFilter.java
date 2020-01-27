@@ -6,7 +6,11 @@ import com.itlize.Korera.commons.RsaManager;
 import com.itlize.Korera.entities.Payload;
 import com.itlize.Korera.entities.User;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -26,7 +30,6 @@ import java.util.Map;
 public class JwtVerifyFilter extends BasicAuthenticationFilter {
 
     private RsaManager rsaManager;
-    AuthenticationManager authenticationManager;
 
     public JwtVerifyFilter(AuthenticationManager authenticationManager, RsaManager rsaManager) {
         super(authenticationManager);
@@ -37,7 +40,6 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String header = request.getHeader("Authorization");
         String path = request.getServletPath();
-        System.out.println("jwt verify path: " + path);
 
         if(path.equals("/user/add") || path.equals("/user/sign-up")){
             chain.doFilter(request, response);
@@ -53,17 +55,47 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
             out.flush();
             out.close();
         } else {
-            String token = header.replace("Bearer ", "");
-            Payload<User> payload = JwtUtils.getInfoFromToken(token, rsaManager.getPublicKey(), User.class);
-            User user = payload.getUserInfo();
 
-            if(user != null){
-                UsernamePasswordAuthenticationToken authResult = new UsernamePasswordAuthenticationToken(user.getUser_name(), null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authResult);
-                request.setAttribute("user_id", user.getUser_id());
-                chain.doFilter(request, response);
+            try{
+                String token = header.replace("Bearer ", "");
+                Payload<User> payload = JwtUtils.getInfoFromToken(token, rsaManager.getPublicKey(), User.class);
+                User user = payload.getUserInfo();
+
+                if(user != null){
+                    UsernamePasswordAuthenticationToken authResult = new UsernamePasswordAuthenticationToken(user.getUser_name(), null, user.getAuthorities());
+
+                    Authentication verifyAuthResult = getAuthenticationManager().authenticate(authResult);
+
+                    SecurityContextHolder.getContext().setAuthentication(verifyAuthResult);
+                    request.setAttribute("user_id", user.getUser_id());
+
+                    chain.doFilter(request, response);
+                }else{
+
+                    throw new BadCredentialsException("authenticate failed!!");
+                }
+
+            }catch (IOException e){
+                e.printStackTrace();
+
+            }catch (ServletException e) {
+
+                e.printStackTrace();
+
+            }catch (AuthenticationException e){
+
+                response.setContentType("application/json;charset=utf-8");
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                PrintWriter out = response.getWriter();
+                Map resultMap = new HashMap();
+                resultMap.put("code", HttpServletResponse.SC_FORBIDDEN);
+                resultMap.put("msg", "please login");
+                out.write(new ObjectMapper().writeValueAsString(resultMap));
+                out.flush();
+                out.close();
             }
         }
+
     }
 
 
