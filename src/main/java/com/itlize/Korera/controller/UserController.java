@@ -60,8 +60,7 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/add", "/sign-up"}, method = RequestMethod.POST)
-    public ResponseEntity addUser(RequestEntity<User> requestEntity){
-        System.out.println("user controller");
+    public ResponseEntity<User> addUser(RequestEntity<User> requestEntity){
         User user = requestEntity.getBody();
 
         long millis = System.currentTimeMillis();
@@ -79,7 +78,7 @@ public class UserController {
 
         body = res > 0 ? "add user successful" : res == -2 ? "duplicated user name" : "not acceptable request for adding user";
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
+        ResponseEntity<User> responseEntity = new ResponseEntity(user,
                 headers,
                 status);
 
