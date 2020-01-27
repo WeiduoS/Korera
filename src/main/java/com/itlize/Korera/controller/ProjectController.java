@@ -109,15 +109,9 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/update/{project_id}", method = RequestMethod.PUT)
-    public ResponseEntity updateProject(@ModelAttribute("project") @RequestBody Project project, RequestEntity<Project> requestEntity){
+    public ResponseEntity<Project> updateProject(@ModelAttribute("project") @RequestBody Project project, RequestEntity<Project> requestEntity){
 
         project = updateProjectMapping(project, requestEntity.getBody());
-        System.out.println("project: " + project);
-        System.out.println("user: " + project.getUser());
-        System.out.println("resource: " + project.getResouces());
-        System.out.println("request body: " + requestEntity.getBody());
-        System.out.println("request headers: " + requestEntity.getHeaders());
-        System.out.println("request method : " + requestEntity.getMethod());
 
         HttpStatus status = null;
         MultiValueMap<String, String> headers = new HttpHeaders();
@@ -136,7 +130,7 @@ public class ProjectController {
             body = "wrong input";
         }
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
+        ResponseEntity<Project> responseEntity = new ResponseEntity<>(project,
                 headers,
                 status);
         return responseEntity;

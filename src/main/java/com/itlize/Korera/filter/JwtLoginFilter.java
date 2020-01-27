@@ -11,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -69,12 +71,12 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-//        if(logger.isDebugEnabled()) {
-//            logger.debug("Authentication success. Updating SecurityContextHolder to contain: "
-//                    + authResult);
-//        }
-//
-//        SecurityContextHolder.getContext().setAuthentication(authResult);
+        if(logger.isDebugEnabled()) {
+            logger.debug("Authentication success. Updating SecurityContextHolder to contain: "
+                    + authResult);
+        }
+
+        SecurityContextHolder.getContext().setAuthentication(authResult);
 
         getRememberMeServices().loginSuccess(request, response, authResult);
 
@@ -99,7 +101,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             resultMap.put("code", HttpServletResponse.SC_OK);
             resultMap.put("msg", "authentication pass！");
             resultMap.put("user", user);
-            resultMap.put("expire-time", DateTime.now().plusMinutes(24 * 60).toDateTime().toString("yyyy/MM/dd HH:mm:ss", Locale.US));
+            resultMap.put("expire-time", DateTime.now().plusMinutes(24 * 60).toDateTime().getMillis());
             resultMap.put("Authorization", "Bearer " + token.getToken());
             out.write(new ObjectMapper().writeValueAsString(resultMap));
             out.flush();

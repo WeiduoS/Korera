@@ -1,7 +1,9 @@
 package com.itlize.Korera.service.impl;
 
 import com.itlize.Korera.dao.ColsDao;
+import com.itlize.Korera.dao.ProjectResourceDao;
 import com.itlize.Korera.entities.Cols;
+import com.itlize.Korera.entities.ProjectResource;
 import com.itlize.Korera.service.ColsServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +22,10 @@ public class ColsServicesImpl implements ColsServices {
     @Autowired
     @Qualifier("ColsDaoImpl")
     ColsDao cd;
+
+    @Autowired
+    @Qualifier("ProjectResourceDaoImpl")
+    ProjectResourceDao prd;
 
     @Override
     public int addCols(Cols cols) {

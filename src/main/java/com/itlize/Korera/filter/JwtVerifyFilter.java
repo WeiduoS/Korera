@@ -62,11 +62,11 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
                 User user = payload.getUserInfo();
 
                 if(user != null){
-                    UsernamePasswordAuthenticationToken authResult = new UsernamePasswordAuthenticationToken(user.getUser_name(), null, user.getAuthorities());
+                    UsernamePasswordAuthenticationToken authResult = new UsernamePasswordAuthenticationToken(user.getUser_name(), user.getPassword(), user.getAuthorities());
 
-                    Authentication verifyAuthResult = getAuthenticationManager().authenticate(authResult);
+//                    Authentication verifyAuthResult = getAuthenticationManager().authenticate(authResult);
 
-                    SecurityContextHolder.getContext().setAuthentication(verifyAuthResult);
+                    SecurityContextHolder.getContext().setAuthentication(authResult);
                     request.setAttribute("user_id", user.getUser_id());
 
                     chain.doFilter(request, response);
