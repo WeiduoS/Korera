@@ -102,7 +102,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByName(String name) {
+    public List<User> getUserByName(String name) {
         if(name == null) return null;
         Session session = sessionFactory.getCurrentSession();
         try{
@@ -110,13 +110,12 @@ public class UserDaoImpl implements UserDao {
             String sql = "select * from User where user_name=?";
             Query query = session.createSQLQuery(sql).setParameter(1, name);
             List<User> list = ((NativeQuery) query).addEntity(User.class).list();
-            if(list.size() >= 2) throw new Exception("multi user share the same username");
             session.getTransaction().commit();
-            return list.get(0);
+            return list;
         }catch (Exception e) {
             e.getStackTrace();
             session.getTransaction().rollback();
-            return null;
+            return new ArrayList<>();
         }
     }
 

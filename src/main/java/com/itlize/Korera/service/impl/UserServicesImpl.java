@@ -1,14 +1,15 @@
 package com.itlize.Korera.service.impl;
 
-import com.itlize.Korera.dao.SysRoleDao;
 import com.itlize.Korera.dao.UserDao;
+import com.itlize.Korera.entities.Project;
 import com.itlize.Korera.entities.SysRole;
 import com.itlize.Korera.entities.User;
 import com.itlize.Korera.service.SysRoleServices;
 import com.itlize.Korera.service.UserServices;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -35,80 +36,168 @@ public class UserServicesImpl implements UserServices {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     public int addUser(User user) {
-        if(user == null) return -1;
-        User u = ud.getUserByName(user.getUser_name());
-        int res = -1;
-        if(u != null) return -2;
+        int res = 0;
+
+        if(sysRoleServices == null || ud == null || user == null) res = -1;
         else{
-            List<SysRole> roles = sysRoleServices.getSysRoleByName("ROLE_USER");
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.getRoles().addAll(roles);
-            res = ud.addUser(user);
+            List<User> users = ud.getUserByName(user.getUser_name());
+            if(users != null && users.size() >= 2) res = -2;
+            else{
+                List<SysRole> roles = sysRoleServices.getSysRoleByName("ROLE_USER");
+                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+                user.getRoles().addAll(roles);
+                res = ud.addUser(user);
+            }
         }
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("adding a User with result " + res + ", [ 1 for success, 0 for unknown error, -1 for null pointer, -2 for duplicated. ]");
+        }
+
         return res;
     }
 
     @Override
     public int updateUser(User user) {
-        if(user == null) return -1;
-        int res = ud.updateUser(user);
+        int res = 0;
+
+        if(user == null || user.getUser_id() == null) res = -1;
+        else {
+            User userById = ud.getUserById(user.getUser_id());
+            if(userById == null) res = -2;
+            else{
+                List<SysRole> roles = sysRoleServices.getSysRoleByName("ROLE_USER");
+                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+                user.getRoles().addAll(roles);
+                res = ud.updateUser(user);
+            }
+        }
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("updating a User with result " + res + ", [ 1 for success, 0 for unknown error, -1 for null pointer, -2 for no such user(id). ]");
+        }
+
         return res;
     }
 
     @Override
     public int saveOrUpdateUser(User user) {
-        if(user == null) return -1;
-        User u = ud.getUserByName(user.getUser_name());
-        int res = -1;
-        if(u != null) return -2;
+        int res = 0;
+
+        if(user == null || user.getUser_name() == null) res = -1;
         else{
-            List<SysRole> roles = sysRoleServices.getSysRoleByName("ROLE_USER");
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.getRoles().addAll(roles);
-            res = ud.saveOrUpdateUser(user);
+            List<User> list = ud.getUserByName(user.getUser_name());
+            if(!list.isEmpty() && list.size() >= 2) res = -2;
+            else if(list.size() == 1) {
+                User dbUser = list.get(0);
+                if(user.getUser_id() != null && dbUser.getUser_id() != user.getUser_id()) res = -2;
+            }else{
+                List<SysRole> roles = sysRoleServices.getSysRoleByName("ROLE_USER");
+                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+                user.getRoles().addAll(roles);
+                res = ud.saveOrUpdateUser(user);
+            }
         }
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("saveOrUpdate a Category with result " + res + ", [ 1 for success, 0 for unknown error, -1 for null pointer, -2 for duplicated(user name). ]");
+        }
+
         return res;
     }
 
     @Override
     public List<User> listUsers() {
-        List<User> res = ud.listUsers();
-        return res == null ? new ArrayList<>() : res;
+        List<User> list = ud.listUsers();
+
+        int res = list.size();
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("list all User with size " + res);
+        }
+
+        return list == null ? new ArrayList<>() : list;
     }
 
     @Override
     public User getUserById(Integer id) {
-        if(id == null || id < 0) return null;
-        User res = ud.getUserById(id);
-        return res;
-    }
+        User user;
 
-    @Override
-    public User getUserByName(String user_name) {
-        if(user_name == null) return null;
-        User user = ud.getUserByName(user_name);
+        if(id == null) return null;
+        else{
+            user = ud.getUserById(id);
+        }
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("find User by id with result: " + (user == null ? " null" : user));
+        }
+
         return user;
     }
 
     @Override
+    public List<User> getUserByName(String user_name) {
+        List<User> list;
+        if(user_name == null) list = null;
+        else{
+            list = ud.getUserByName(user_name);
+        }
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("find User by name with size " + (list == null ? 0 : list.size()));
+        }
+
+        return list == null ? new ArrayList<>() : list;
+    }
+
+    @Override
     public int removeUser(User user) {
-        if(user == null) return -1;
-        int res = ud.removeUser(user);
+        int res = 0;
+
+        if(user == null || user.getUser_id() == null) res = -1;
+        else{
+            User removeUser = ud.getUserById(user.getUser_id());
+            for(Project project : removeUser.getProjects()) {
+                project.setResouces(new HashSet<>());
+            }
+            res = ud.removeUser(removeUser);
+        }
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("delete a User with result " + res + ", [ 1 for success, 0 for unknown error, -1 for null pointer(user or id) ]");
+        }
+
         return res;
     }
 
     @Override
     public BigInteger getUserSize() {
-        return ud.getUserSize();
+        BigInteger res = ud.getUserSize();
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("get User size with result " + res);
+        }
+
+        return res;
     }
 
     @Override
     public List<User> paginationUser(Integer startIndex, Integer pageSize) {
-        if(startIndex == null || pageSize == null || startIndex <= 0 || pageSize <= 0) return new ArrayList<>();
-        List<User> list = ud.paginationUser(startIndex, pageSize);
+        List<User> list;
+
+        if(startIndex == null || pageSize == null || startIndex <= 0 || pageSize <= 0) list = null;
+        else{
+            list = ud.paginationUser(startIndex, pageSize);
+        }
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("find User by pagination with size " + (list == null ? 0 : list.size()));
+        }
+
         return list;
     }
 
@@ -125,21 +214,17 @@ public class UserServicesImpl implements UserServices {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            User user = ud.getUserByName(username);
-            if(user == null) return null;
+            List<User> users = ud.getUserByName(username);
+            if(users == null || users.size() >= 2) throw new UsernameNotFoundException("duplicate username found");
+
+            User user = users.get(0);
 
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
             for(SysRole role : user.getRoles()) authorities.add(new SimpleGrantedAuthority(role.getROLE_NAME()));
-//            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-//            UserDetails ures = new org.springframework.security.core.userdetails.User(
-//                    user.getUser_name(),
-//                    "{noop}" + user.getPassword(),
-//                    authorities);
 
             UserDetails ures = new org.springframework.security.core.userdetails.User(
                     user.getUser_name(), user.getPassword(),
                     authorities);
-            System.out.println("user details:" + ures.toString());
             return ures;
         }catch (Exception e) {
             e.printStackTrace();

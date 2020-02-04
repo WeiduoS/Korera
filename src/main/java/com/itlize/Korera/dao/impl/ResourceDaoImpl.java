@@ -164,7 +164,7 @@ public class ResourceDaoImpl implements ResourceDao{
         try{
             session.beginTransaction();
             int limit = (startIndex - 1) * pageSize;
-            Query query = session.createSQLQuery("selet * from Resource ")
+            Query query = session.createSQLQuery("select * from Resource ")
                     .setFirstResult(limit)
                     .setMaxResults(pageSize);
             list = query.list();

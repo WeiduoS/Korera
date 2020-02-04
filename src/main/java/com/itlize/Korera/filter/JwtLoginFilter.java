@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -101,7 +100,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             resultMap.put("code", HttpServletResponse.SC_OK);
             resultMap.put("msg", "authentication pass！");
             resultMap.put("user", user);
-            resultMap.put("expire-time", DateTime.now().plusMinutes(24 * 60).toDateTime().getMillis());
+            resultMap.put("expire_time", DateTime.now().plusMinutes(24 * 60).toDateTime().getMillis());
             resultMap.put("Authorization", "Bearer " + token.getToken());
             out.write(new ObjectMapper().writeValueAsString(resultMap));
             out.flush();

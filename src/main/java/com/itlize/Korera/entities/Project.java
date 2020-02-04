@@ -1,7 +1,6 @@
 package com.itlize.Korera.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,9 +13,6 @@ import java.util.Set;
  */
 @Entity
 @Table(schema = "KoreraDB", name="project")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "project_id")
 public class Project implements Serializable {
 
     @Id
@@ -28,15 +24,17 @@ public class Project implements Serializable {
     private String project_name;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", insertable = true, updatable = false, nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", insertable = true, updatable = true, nullable = true)
+    @JsonBackReference
     private User user;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "project_resource",
             joinColumns = {@JoinColumn(name = "project_id", nullable = true, insertable = true, updatable = true)},
             inverseJoinColumns = {@JoinColumn(name = "resource_id", nullable = true, insertable = true, updatable = true)})
+    @JsonIgnore
     private Set<Resource> resources = new HashSet<>();
 
     public Project() {

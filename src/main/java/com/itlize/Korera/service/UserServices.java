@@ -19,7 +19,7 @@ public interface UserServices extends UserDetailsService {
 
     public User getUserById(Integer id);
 
-    public User getUserByName(String user_name);
+    public List<User> getUserByName(String user_name);
 
     public int removeUser(User user);
 

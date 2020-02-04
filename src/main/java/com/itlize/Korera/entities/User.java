@@ -1,9 +1,6 @@
 package com.itlize.Korera.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,14 +12,12 @@ import java.util.*;
 
 @Entity
 @Table(schema = "KoreraDB", name="user")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "user_id")
 public class User implements Serializable, UserDetails {
 
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user_id;
+    private Integer user_id;
 
     @Column(name = "user_name")
     private String user_name;
@@ -40,13 +35,14 @@ public class User implements Serializable, UserDetails {
     private String remember_me;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "sys_user_role",
             joinColumns = {@JoinColumn(name = "UID", nullable = true, insertable = true, updatable = true)},
             inverseJoinColumns = {@JoinColumn(name = "RID", nullable = true, insertable = true, updatable = true)})
     private Set<SysRole> roles = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    @JsonManagedReference
     private Set<Project> projects = new HashSet<>();
 
     public User() {
@@ -68,11 +64,11 @@ public class User implements Serializable, UserDetails {
         this.password = password;
     }
 
-    public int getUser_id() {
+    public Integer getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(Integer user_id) {
         this.user_id = user_id;
     }
 

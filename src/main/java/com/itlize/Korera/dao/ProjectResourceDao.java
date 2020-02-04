@@ -1,5 +1,6 @@
 package com.itlize.Korera.dao;
 
+import com.itlize.Korera.entities.ProjResId;
 import com.itlize.Korera.entities.ProjectResource;
 
 import java.util.List;

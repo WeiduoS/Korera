@@ -18,14 +18,14 @@ public class ProjectResrouceDaoTest {
 
     @Test
     public void addMappingTest() {
-        ProjectResource projectResource;
-        for(int i = 1; i <= 5; i++) {
-            projectResource = new ProjectResource(27, 5);
-            for(int j = 1; j <= 3; j++) {
-                projectResource.getCols().add(new Cols("field", "type","formula", "value", projectResource));
-            }
-            System.out.println(mappingDao.addMapping(projectResource));
-        }
+//        ProjectResource projectResource;
+//        for(int i = 1; i <= 5; i++) {
+//            projectResource = new ProjectResource(27, 5);
+//            for(int j = 1; j <= 3; j++) {
+//                projectResource.getCols().add(new Cols("field", "type","formula", "value", projectResource));
+//            }
+//            System.out.println(mappingDao.addMapping(projectResource));
+//        }
     }
 
     @Test

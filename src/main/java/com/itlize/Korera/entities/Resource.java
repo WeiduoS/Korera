@@ -1,20 +1,12 @@
 package com.itlize.Korera.entities;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(schema = "KoreraDB", name="resource")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "resource_id")
 public class Resource implements Serializable{
 
     @Id
@@ -28,16 +20,18 @@ public class Resource implements Serializable{
     @Column(name = "resource_name")
     private String resource_name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", insertable = true, updatable = false, nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id", insertable = true, updatable = true, nullable = true)
+    @JsonBackReference
     private Category category;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "resources")
+    @JsonIgnore
     public Set<Project> projects =  new HashSet<>();
 
     @Transient
-    private List<Cols> cols;
+    private List<Cols> cols = new ArrayList<>();
 
     public Resource() {
 
@@ -47,13 +41,19 @@ public class Resource implements Serializable{
         this.resource_id = resource_id;
     }
 
+    public Resource(Integer resource_id, String resource_code, String resource_name) {
+        this.resource_id = resource_id;
+        this.resource_code = resource_code;
+        this.resource_name = resource_name;
+    }
+
     public Resource(String resource_code, String resource_name, Category category) {
         this.resource_code = resource_code;
         this.resource_name = resource_name;
         this.category = category;
     }
 
-    public Resource(Integer resourceId, String resource_code, String resource_name, Category category) {
+    public Resource(Integer resource_id, String resource_code, String resource_name, Category category) {
         this.resource_id = resource_id;
         this.resource_code = resource_code;
         this.resource_name = resource_name;
@@ -112,6 +112,21 @@ public class Resource implements Serializable{
         this.cols = cols;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resource resource = (Resource) o;
+        return Objects.equals(resource_id, resource.resource_id) &&
+                Objects.equals(resource_code, resource.resource_code) &&
+                Objects.equals(resource_name, resource.resource_name);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(resource_id, resource_code, resource_name);
+    }
 
     @Override
     public String toString() {
@@ -119,6 +134,7 @@ public class Resource implements Serializable{
                 "resource_id=" + resource_id +
                 ", resource_code='" + resource_code + '\'' +
                 ", resource_name='" + resource_name + '\'' +
+                ", cols=" + cols +
                 '}';
     }
 }

@@ -7,7 +7,7 @@
   <groupId>com.itlize</groupId>
   <artifactId>Korera</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
 
   <name>Korera</name>
   <!-- FIXME change it to the project's website -->
@@ -34,6 +34,12 @@
     <groupId>org.springframework</groupId>
     <artifactId>spring-core</artifactId>
     <version>${spring.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!--Spring Context-->
@@ -71,13 +77,6 @@
       <version>${spring.version}</version>
     </dependency>
 
-    <!-- Spring Data JPA -->
-    <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-jpa</artifactId>
-      <version>${spring.jpa.version}</version>
-    </dependency>
-
     <!--Spring TestContext Framework-->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -86,103 +85,6 @@
       <scope>test</scope>
     </dependency>
 
-
-
-    <!--Hibernate-->
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
-
-
-    <!--&lt;!&ndash;Hibernate Optional&ndash;&gt;-->
-    <!--&lt;!&ndash;Support for running Hibernate O/RM in OSGi environments&ndash;&gt;-->
-    <!--<dependency>-->
-    <!--<groupId>org.hibernate</groupId>-->
-    <!--<artifactId>hibernate-osgi</artifactId>-->
-    <!--<version>${hibernate.version}</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash;Hibernate's entity version (audit/history) support&ndash;&gt;-->
-    <!--<dependency>-->
-    <!--<groupId>org.hibernate</groupId>-->
-    <!--<artifactId>hibernate-envers</artifactId>-->
-    <!--<version>${hibernate.version}</version>-->
-    <!--</dependency>-->
-
-    <!--Integration for c3p0 Connection pooling into Hibernate ORM-->
-    <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-c3p0</artifactId>
-        <version>${hibernate.version}</version>
-    </dependency>
-
-
-    <!--&lt;!&ndash;Integration for using Ehcache 2.x as a Hibernate second-level-cache provider&ndash;&gt;-->
-    <!--<dependency>-->
-    <!--<groupId>org.hibernate</groupId>-->
-    <!--<artifactId>hibernate-ehcache</artifactId>-->
-    <!--<version>${hibernate.version}</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash;Infinispan Hibernate 5.3 Cache module&ndash;&gt;-->
-    <!--<dependency>-->
-    <!--<groupId>org.infinispan</groupId>-->
-    <!--<artifactId>infinispan-hibernate-cache-v53</artifactId>-->
-    <!--<version>9.4.16.Final</version>-->
-    <!--</dependency>-->
-
-      <!--Servlet-->
-    <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>javax.servlet-api</artifactId>
-        <version>4.0.0</version>
-        <scope>provided</scope>
-    </dependency>
-
-    <!--Servlet-->
-    <!--<dependency>-->
-      <!--<groupId>javax.servlet</groupId>-->
-      <!--<artifactId>servlet-api</artifactId>-->
-      <!--<version>2.5</version>-->
-      <!--<scope>provided</scope>-->
-    <!--</dependency>-->
-
-    <!--JSP-->
-    <dependency>
-      <groupId>javax.servlet.jsp</groupId>
-      <artifactId>jsp-api</artifactId>
-      <version>2.2</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <!--JSTL-->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
-    </dependency>
-
-    <!--&lt;!&ndash;spring-security.xml-core&ndash;&gt;-->
-    <!--<dependency>-->
-      <!--<groupId>org.springframework.security</groupId>-->
-      <!--<artifactId>spring-security.xml-core</artifactId>-->
-      <!--<version>${spring.security}</version>-->
-    <!--</dependency>-->
-
-    <!--&lt;!&ndash;spring-security.xml-web&ndash;&gt;-->
-    <!--<dependency>-->
-      <!--<groupId>org.springframework.security</groupId>-->
-      <!--<artifactId>spring-security.xml-web</artifactId>-->
-      <!--<version>${spring.security}</version>-->
-    <!--</dependency>-->
 
     <!--spring-security.xml-config-->
     <dependency>
@@ -198,6 +100,48 @@
       <version>${spring.security}</version>
     </dependency>
 
+    <!--Hibernate-->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
+    <!--Integration for c3p0 Connection pooling into Hibernate ORM-->
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-c3p0</artifactId>
+        <version>${hibernate.version}</version>
+    </dependency>
+
+    <!--Servlet-->
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>4.0.0</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!--JSP-->
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.2</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--JSTL-->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
 
     <!--MySQL-->
     <dependency>
@@ -233,6 +177,13 @@
       <artifactId>logback-classic</artifactId>
       <version>${logback.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.30</version>
+    </dependency>
+
 
     <!--Core Jackson processing abstractions (aka Streaming API), implementation for JSON-->
     <dependency>
@@ -283,7 +234,6 @@
       <artifactId>joda-time</artifactId>
       <version>2.10.5</version>
     </dependency>
-
 
     <dependency>
       <groupId>org.projectlombok</groupId>

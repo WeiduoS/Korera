@@ -1,9 +1,6 @@
 package com.itlize.Korera.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,8 +13,6 @@ import java.util.Set;
 
 @Entity
 @Table(schema = "KoreraDB", name="category")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "category_id")
 public class Category {
 
     @Id
@@ -28,9 +23,9 @@ public class Category {
     @Column(name = "category_name")
     private String category_name;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "category")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category", orphanRemoval = true)
+    @JsonManagedReference
     private Set<Resource> resources = new HashSet<>();
-
 
     public Category() {
 

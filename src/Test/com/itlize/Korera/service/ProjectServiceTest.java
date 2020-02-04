@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +18,9 @@ import java.util.List;
  * @author Weiduo
  * @date 2020/1/2 - 10:37 AM
  */
-@ContextConfiguration(locations = "classpath:config/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
+@Component
 public class ProjectServiceTest {
 
     @Autowired

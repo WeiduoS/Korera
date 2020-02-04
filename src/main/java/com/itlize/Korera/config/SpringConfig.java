@@ -1,6 +1,7 @@
 package com.itlize.Korera.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;

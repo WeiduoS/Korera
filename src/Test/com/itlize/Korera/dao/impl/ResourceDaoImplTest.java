@@ -1,5 +1,6 @@
 package com.itlize.Korera.dao.impl;
 
+import com.itlize.Korera.config.SpringConfig;
 import com.itlize.Korera.dao.ProjectDao;
 import com.itlize.Korera.dao.ResourceDao;
 import com.itlize.Korera.entities.Category;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
@@ -25,6 +27,7 @@ import static org.junit.Assert.*;
  * @date 2020/1/22 - 3:30 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes=SpringConfig.class, loader=AnnotationConfigContextLoader.class)
 @Transactional
 public class ResourceDaoImplTest {
 
@@ -40,14 +43,10 @@ public class ResourceDaoImplTest {
     @Test
     public void addResource() {
         Resource resource = new Resource();
-        for(int i = 1; i <= 1; i++) {
+        for(int i = 1; i <= 5; i++) {
             resource.setResource_name("new resource " + i);
             resource.setResource_code(String.valueOf(i * 10));
-            resource.setCategory_id(new Category(2, " 000"));
-
-            Set<Project> set = new HashSet<>();
-            set.add(new Project(40));
-            resource.setProjects(set);
+            resource.setCategory_id(new Category(18));
 
             int res = rd.addResource(resource);
             System.out.println(res);

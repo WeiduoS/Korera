@@ -83,19 +83,6 @@ public class ProjectResourceDaoImpl implements ProjectResourceDao {
 
         try{
             session.beginTransaction();
-//            String sql = "select * from proj_res_mapping p join cols c " +
-//                    "where p.project_id = c.project_id && " +
-//                    "p.resource_id = c.resource_id";
-//            Query query = session.createSQLQuery(sql);
-//            List<Object[]> res = ((NativeQuery) query).addEntity("p", ProjectResource.class).addEntity("c", Cols.class).list();
-//
-//            for(Object[] objects : res) {
-//                ProjectResource mapping = (ProjectResource) objects[0];
-//                for(int i = 1; i < objects.length; i++) {
-//                    mapping.getCols().add((Cols) objects[i]);
-//                }
-//                list.add(mapping);
-//            }
             String sql = "select * from project_resource";
             list = session.createSQLQuery(sql).addEntity(ProjectResource.class).list();
             session.getTransaction().commit();
@@ -112,7 +99,6 @@ public class ProjectResourceDaoImpl implements ProjectResourceDao {
     public List<ProjectResource> getMappingById(Integer project_id, Integer resource_id) {
         if(sessionFactory == null) return  null;
         Session session = sessionFactory.getCurrentSession();
-        ProjectResource mapping = null;
         List<ProjectResource> list;
         try{
             session.beginTransaction();
@@ -120,7 +106,6 @@ public class ProjectResourceDaoImpl implements ProjectResourceDao {
             Query query = session.createSQLQuery(sql);
             list = ((NativeQuery) query).addEntity(ProjectResource.class).
                     setParameter(1, project_id).setParameter(2, resource_id).list();
-            mapping = list.get(0);
             session.getTransaction().commit();
             return list;
         }catch (Exception e) {

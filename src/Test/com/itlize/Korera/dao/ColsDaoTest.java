@@ -18,10 +18,10 @@ public class ColsDaoTest {
 
     @Test
     public void addColsTest() {
-        for(int i = 1; i <= 5; i++) {
-            Cols cols = new Cols("1", "1", "1", "1", new ProjectResource(6, 16,5));
-            System.out.println(colsDao.addCols(cols));
-        }
+//        for(int i = 1; i <= 5; i++) {
+//            Cols cols = new Cols("1", "1", "1", "1", new ProjectResource(6, 16,5));
+//            System.out.println(colsDao.addCols(cols));
+//        }
     }
 
     @Test
@@ -43,10 +43,10 @@ public class ColsDaoTest {
 
     @Test
     public void saveOrupdateColsTest() {
-        for(int i = 1; i <= 5; i++) {
-            Cols cols = new Cols("1", "1", "1", "1", new ProjectResource(6, 16,5));
-            System.out.println(colsDao.addCols(cols));
-        }
+//        for(int i = 1; i <= 5; i++) {
+//            Cols cols = new Cols("1", "1", "1", "1", new ProjectResource(6, 16,5));
+//            System.out.println(colsDao.addCols(cols));
+//        }
     }
 
     @Test

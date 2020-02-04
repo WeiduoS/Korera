@@ -1,5 +1,8 @@
 package com.itlize.Korera.dao.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itlize.Korera.config.SpringConfig;
 import com.itlize.Korera.dao.ProjectDao;
 import com.itlize.Korera.entities.Category;
 import com.itlize.Korera.entities.Project;
@@ -7,10 +10,13 @@ import com.itlize.Korera.entities.Resource;
 import com.itlize.Korera.entities.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
@@ -22,7 +28,7 @@ import static org.junit.Assert.*;
  * @author Weiduo
  * @date 2020/1/22 - 3:41 PM
  */
-@ContextConfiguration(locations = "classpath:config/applicationContext.xml")
+@ContextConfiguration(classes=SpringConfig.class, loader=AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class ProjectDaoImplTest {
@@ -38,8 +44,8 @@ public class ProjectDaoImplTest {
 //        project.getResouces().add(new Resource(42));
 //        System.out.println(pd.addProject(project));
         // test user cascade
-        Project project = new Project("user cascade", new User(4));
-        project.setUser(new User(4));
+        Project project = new Project("user cascade", new User(1));
+        project.setUser(new User(1));
         System.out.println(pd.addProject(project));
 
     }
@@ -62,8 +68,8 @@ public class ProjectDaoImplTest {
 //            Project p = new Project("xiaoming project", new User(1,"xiaoming", "1231"));
 //            System.out.println(pd.saveOrUpdateProject(p));
 //        }
-        Project project = new Project(37,"p4new01", new User(4));
-        project.getResouces().add(new Resource(5, "000", "000", new Category(2, "")));
+        Project project = new Project(1,"p4new01", new User(1));
+        project.getResouces().add(new Resource(1, "000", "000"));
         System.out.println(pd.saveOrUpdateProject(project));
     }
 
@@ -74,9 +80,12 @@ public class ProjectDaoImplTest {
     }
 
     @Test
-    public void getProjectById() {
-        Project project = pd.getProjectById(22);
+    public void getProjectById() throws JsonProcessingException {
+        Project project = pd.getProjectById(1);
         System.out.println(project.toString());
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(project);
+        System.out.println(json);
     }
 
     @Test

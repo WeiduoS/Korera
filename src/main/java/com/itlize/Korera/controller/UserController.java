@@ -2,6 +2,7 @@ package com.itlize.Korera.controller;
 
 
 import com.itlize.Korera.entities.Project;
+import com.itlize.Korera.entities.Resource;
 import com.itlize.Korera.entities.User;
 import com.itlize.Korera.service.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,11 +73,8 @@ public class UserController {
         headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
 
         int res = userServices.addUser(user);
-        String body = "";
         if(res < 0) status = HttpStatus.NOT_ACCEPTABLE;
         else status = HttpStatus.CREATED;
-
-        body = res > 0 ? "add user successful" : res == -2 ? "duplicated user name" : "not acceptable request for adding user";
 
         ResponseEntity<User> responseEntity = new ResponseEntity(user,
                 headers,
@@ -86,58 +84,39 @@ public class UserController {
     }
 
     @RequestMapping(value = "/remove/{user_id}", method = RequestMethod.DELETE)
-    public ResponseEntity removeUser(@ModelAttribute("user") User user){
-        HttpStatus status = HttpStatus.OK;
+    public ResponseEntity<User> removeUser(@ModelAttribute("user") User user){
+        HttpStatus status;
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
-        headers.put("Content-Type", Arrays.asList("text/plain;charset=UTF-8"));
-        String body = "";
+        headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
 
         int res = userServices.removeUser(user);
 
-        if(res > 0) {
-            status = HttpStatus.OK;
-            body = "remove successfully";
-        }
-        else {
-            status = HttpStatus.BAD_REQUEST;
-            body = "bad request";
-        }
+        if(res > 0) status = HttpStatus.OK;
+        else status = HttpStatus.BAD_REQUEST;
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
-                headers,
-                status);
+        ResponseEntity<User> responseEntity = new ResponseEntity<>(user, headers, status);
 
         return responseEntity;
     }
 
     @RequestMapping(value = "/update/{user_id}", method = RequestMethod.PUT)
-    public ResponseEntity updateUser(@ModelAttribute("user") User user, RequestEntity<User> requestEntity){
+    public ResponseEntity<User> updateUser(@ModelAttribute("user") User user, RequestEntity<User> requestEntity){
         user = updateUserMapping(user, requestEntity.getBody());
 
-        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        HttpStatus status;
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
-        headers.put("Content-Type", Arrays.asList("text/plain;charset=UTF-8"));
-        String body = "";
+        headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
 
         int res = userServices.saveOrUpdateUser(user);
 
-        if(res > 0) {
-            status = HttpStatus.OK;
-            body = "update successfully";
-        }
-        else if(res == -1){
-            status = HttpStatus.NOT_ACCEPTABLE;
-            body = "the user information is not acceptable";
-        }else if(res == -2) {
-            status = HttpStatus.NOT_ACCEPTABLE;
-            body = "the user name is already exist";
-        }
+        if(res > 0) status = HttpStatus.OK;
+        else if(res == -1)status = HttpStatus.NOT_ACCEPTABLE;
+        else if(res == -2) status = HttpStatus.NOT_ACCEPTABLE;
+        else status = HttpStatus.NOT_ACCEPTABLE;
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
-                headers,
-                status);
+        ResponseEntity<User> responseEntity = new ResponseEntity<>(user, headers, status);
         return responseEntity;
 
     }
@@ -159,6 +138,34 @@ public class UserController {
             if(user == null) model.addAttribute("user", new Project());
             else model.addAttribute("user", user);
         }
+    }
+
+    @RequestMapping(value = "/pagination/{page}",method = RequestMethod.GET)
+    public ResponseEntity<List<User>> pagination(@PathVariable("page") String page){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.put("Cache-Control", Arrays.asList("max-age=3600"));
+        headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
+
+        if(userServices == null) return new ResponseEntity<>(new ArrayList<>(), headers, status);
+
+        String[] strs = page.split("-");
+        List<User> users = new ArrayList<>();
+
+        try{
+            Integer start = Integer.valueOf(strs[0]);
+            Integer size = Integer.valueOf(strs[1]);
+            status = HttpStatus.OK;
+            users = userServices.paginationUser(start, size);
+        }catch (Exception e) {
+            status = HttpStatus.BAD_REQUEST;
+
+        }
+
+        ResponseEntity<List<User>> responseEntity = new ResponseEntity<>(users,
+                headers,
+                status);
+        return responseEntity;
     }
 
 

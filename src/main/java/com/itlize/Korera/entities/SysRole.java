@@ -1,11 +1,7 @@
 package com.itlize.Korera.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,8 +14,6 @@ import java.util.Set;
 
 @Entity
 @Table(schema = "KoreraDB", name="sys_role")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "sysRole_id")
 public class SysRole implements Serializable, GrantedAuthority {
 
     @Id
@@ -35,6 +29,7 @@ public class SysRole implements Serializable, GrantedAuthority {
     private String ROLE_DESC;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public SysRole() {

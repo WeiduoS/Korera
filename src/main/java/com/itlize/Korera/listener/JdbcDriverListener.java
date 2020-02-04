@@ -20,7 +20,6 @@ public class JdbcDriverListener implements ServletContextListener {
     }
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        // 解决Tomcat mysql 驱动内存泄漏，手动注销JDBC
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         Driver d = null;
         while (drivers.hasMoreElements()) {
@@ -30,6 +29,5 @@ public class JdbcDriverListener implements ServletContextListener {
             } catch (SQLException ex) {
             }
         }
-//        AbandonedConnectionCleanupThread.shutdown(true);
     }
 }

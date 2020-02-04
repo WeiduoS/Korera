@@ -1,5 +1,8 @@
 package com.itlize.Korera.dao.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itlize.Korera.config.SpringConfig;
 import com.itlize.Korera.dao.UserDao;
 import com.itlize.Korera.entities.Project;
 import com.itlize.Korera.entities.User;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
@@ -22,7 +26,7 @@ import static org.junit.Assert.*;
  * @author Weiduo
  * @date 2020/1/22 - 12:09 PM
  */
-@ContextConfiguration(locations = "classpath:config/applicationContext.xml")
+@ContextConfiguration(classes=SpringConfig.class, loader=AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class UserDaoImplTest {
@@ -103,15 +107,28 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public void getUserById() {
-        User user = ud.getUserById(3);
-        System.out.println(user.toString());
+    public void getUserById() throws JsonProcessingException {
+//        User user = ud.getUserById(1);
+//        System.out.println(user.toString());
+
+        ObjectMapper mapper = new ObjectMapper();
+//        String json = mapper.writeValueAsString(user);
+//        System.out.println("user json: " + json);
+
+        String fakeUser = "{\n" +
+                "\t\"user_name\":\"xxx02\",\n" +
+                "\t\"password\":\"123\",\n" +
+                "\t\"remember_me\":\"remember-me\"\n" +
+                "}";
+//        fakeUser = mapper.writeValueAsString(fakeUser);
+        User user = mapper.readValue(fakeUser, User.class);
+        System.out.println("after user json: " + user.toString());
     }
 
     @Test
     public void getUserByName() {
-        User user = ud.getUserByName("Hello 2");
-        System.out.println(user);
+        List<User> users = ud.getUserByName("Hello 2");
+        System.out.println(users);
     }
 
     @Test

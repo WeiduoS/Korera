@@ -31,7 +31,7 @@ import java.util.List;
 @RequestMapping("/category")
 public class CategoryController {
 
-    @Autowired(required=false)
+    @Autowired
     @Qualifier("CategoryServicesImpl")
     private CategoryServices categoryServices;
 
@@ -43,9 +43,10 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/findById/{category_id}", method = RequestMethod.GET)
-    public Category findByID(@PathVariable("category_id")Integer category_id, Model model) {
+    public Category findByID(@PathVariable("category_id")Integer category_id) {
         if(categoryServices == null || category_id == null) return new Category();
-        return (Category) model.getAttribute("category");
+        Category category = categoryServices.getCategoryById(category_id);
+        return category == null ? new Category() : category;
     }
 
     @RequestMapping(value = "/findByName/{category_name}", method = RequestMethod.GET)
@@ -57,35 +58,25 @@ public class CategoryController {
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity addCategory(RequestEntity<Category> requestEntity){
+    public ResponseEntity<Category> addCategory(RequestEntity<Category> requestEntity){
         Category category = requestEntity.getBody();
 
-        HttpStatus status = null;
+        HttpStatus status;
+
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
         headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
-        String body = "";
         int res = -1;
 
         if(category != null) {
-            for(Resource resource : category.getResources()) {
-                resource.setCategory_id(category);
-            }
-            res = categoryServices.addCategory(category);
+            res = categoryServices.saveOrUpdateCategory(category);
         }
 
-        if(res > 0) {
-            status = HttpStatus.OK;
-            body = "add successfully";
-        }
-        else {
-            status = HttpStatus.BAD_REQUEST;
-            body = "wrong input";
-        }
+        if(res > 0) status = HttpStatus.OK;
+        else status = HttpStatus.BAD_REQUEST;
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
-                headers,
-                status);
+        ResponseEntity<Category> responseEntity = new ResponseEntity<>(category, headers, status);
+
         return responseEntity;
     }
 
@@ -94,33 +85,25 @@ public class CategoryController {
     public ResponseEntity updateCategory(@ModelAttribute("category") Category category, RequestEntity<Category> requestEntity){
         category = updateCategoryMapping(category, requestEntity.getBody());
 
-        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        HttpStatus status;
+
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
         headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
-        String body = "";
 
         int res = categoryServices.saveOrUpdateCategory(category);
 
-        if(res > 0) {
-            status = HttpStatus.OK;
-            body = "update successfully";
-        }
-        else if(res == -1){
-            status = HttpStatus.NOT_ACCEPTABLE;
-            body = "the category information is not acceptable";
-        }else if(res == -2) {
-            status = HttpStatus.NOT_ACCEPTABLE;
-            body = "the category name is already exist";
-        }
+        if(res == -1) status = HttpStatus.NOT_ACCEPTABLE;
+        else if(res == -2) status = HttpStatus.NOT_ACCEPTABLE;
+        else if(res > 0) status = HttpStatus.OK;
+        else  status = HttpStatus.NOT_ACCEPTABLE;
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
-                headers,
-                status);
+        ResponseEntity<Category> responseEntity = new ResponseEntity<>(category, headers, status);
+
         return responseEntity;
     }
 
-    @ModelAttribute(value = "/*/{category_id}")
+    @ModelAttribute(value = "/update/{category_id}")
     public void preCategoryRequest(@PathVariable(value = "category_id", required = false) Integer category_id, Model model) {
         if(category_id != null) {
             Category category = categoryServices.getCategoryById(category_id);
@@ -137,30 +120,49 @@ public class CategoryController {
 
 
     @RequestMapping(value = "/delete/{category_id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteCategory(@ModelAttribute("category") Category category){
-        HttpStatus status = HttpStatus.OK;
+    public ResponseEntity<Category> deleteCategory(@ModelAttribute("category") Category category){
+        HttpStatus status;
+
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.put("Cache-Control", Arrays.asList("max-age=3600"));
         headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
-        String body = "";
         int res = categoryServices.removeCategories(category);
 
-        if(res > 0) {
-            status = HttpStatus.OK;
-            body = "remove successfully";
-        }
-        else {
-            status = HttpStatus.BAD_REQUEST;
-            body = "bad request";
-        }
+        if(res > 0) status = HttpStatus.OK;
+        else status = HttpStatus.BAD_REQUEST;
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(body,
-                headers,
-                status);
+        ResponseEntity<Category> responseEntity = new ResponseEntity<>(category, headers, status);
 
         return responseEntity;
     }
 
+    @RequestMapping(value = "/pagination/{page}", method = RequestMethod.GET)
+    public ResponseEntity<List<Category>> pagination(@PathVariable("page") String page) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
 
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.put("Cache-Control", Arrays.asList("max-age=3600"));
+        headers.put("Content-Type", Arrays.asList("application/json;charset=UTF-8"));
+
+        if(categoryServices == null) return new ResponseEntity(new ArrayList<>(), headers, status);
+
+        String[] strs = page.split("-");
+
+        List<Category> list = new ArrayList<>();
+
+        try{
+            Integer start = Integer.valueOf(strs[0]);
+            Integer size = Integer.valueOf(strs[1]);
+            status = HttpStatus.OK;
+            list = categoryServices.paginationCategory(start, size);
+        }catch (Exception e) {
+            status = HttpStatus.BAD_REQUEST;
+
+        }
+
+        ResponseEntity<List<Category>> responseEntity = new ResponseEntity<>(list, headers, status);
+
+        return responseEntity;
+    }
 
 }

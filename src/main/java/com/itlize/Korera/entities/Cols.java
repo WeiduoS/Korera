@@ -1,5 +1,7 @@
 package com.itlize.Korera.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,8 +32,14 @@ public class Cols implements Serializable {
     @Column(name = "value")
     private String value;
 
-    @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "pr_id", insertable = true, updatable = true, nullable = true)
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumns({
+            @JoinColumn(name = "project_id", referencedColumnName = "project_id"),
+            @JoinColumn(name = "resource_id", referencedColumnName = "resource_id")
+        }
+    )
+    @JsonBackReference
     private ProjectResource projectResource;
 
 
@@ -74,6 +82,7 @@ public class Cols implements Serializable {
         this.value = value;
         this.projectResource = projectResource;
     }
+
 
     public Integer getId() {
         return id;
@@ -128,17 +137,13 @@ public class Cols implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cols cols = (Cols) o;
-        return Objects.equals(id, cols.id) &&
-                Objects.equals(field, cols.field) &&
-                Objects.equals(type, cols.type) &&
-                Objects.equals(formula, cols.formula) &&
-                Objects.equals(value, cols.value);
+        return Objects.equals(id, cols.id);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, field, type, formula, value);
+        return Objects.hash(id);
     }
 
     @Override
